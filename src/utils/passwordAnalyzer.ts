@@ -1,0 +1,381 @@
+/**
+ * PasswordGuard - Educational Password Security Analysis Engine
+ * 
+ * NOTE: This analyzer is designed for educational heuristics in university coursework.
+ * It runs 100% in the user's browser. It never transmits, logs, or persists input.
+ */
+
+export interface SecurityCheckItem {
+  id: string;
+  label: string;
+  passed: boolean;
+  type: 'requirement' | 'warning';
+  detail?: string;
+}
+
+export interface CrackTimeEstimate {
+  scenario: string;
+  ratePerSecond: number;
+  rateLabel: string;
+  seconds: number;
+  displayTime: string;
+  assumption: string;
+}
+
+export interface PasswordAnalysisResult {
+  passwordLength: number;
+  hasLower: boolean;
+  hasUpper: boolean;
+  hasNumber: boolean;
+  hasSpecial: boolean;
+  characterPoolSize: number;
+  diversityCount: number;
+  hasRepeatedChars: boolean;
+  hasSequentialPattern: boolean;
+  hasCommonPattern: boolean;
+  detectedPatternName?: string;
+  score: number; // 0 - 100
+  tier: 'Weak' | 'Medium' | 'Strong';
+  tierColor: string;
+  estimatedEntropyBits: number;
+  searchSpaceCombinations: string; // Scientific or formatted string
+  searchSpaceBigIntApprox: number; // For log-scale comparison
+  checks: SecurityCheckItem[];
+  warnings: string[];
+  recommendations: string[];
+  crackEstimates: CrackTimeEstimate[];
+  scoreBreakdown: {
+    lengthScore: number;
+    varietyScore: number;
+    diversityBonus: number;
+    penalties: number;
+  };
+}
+
+const COMMON_PATTERNS = [
+  'password', 'p@ssword', 'passw0rd', '123456', '12345678', '123456789',
+  'qwerty', 'admin', 'administrator', 'welcome', 'letmein', 'monkey',
+  'iloveyou', 'dragon', 'football', 'baseball', 'princess', 'sunshine',
+  'master', 'shadow', 'superman', 'batman', 'trustno1', 'secret',
+  'login', 'root', 'changeme', 'hello', 'default', 'test1234'
+];
+
+const SEQUENCES = [
+  '0123', '1234', '2345', '3456', '4567', '5678', '6789', '7890',
+  '9876', '8765', '7654', '6543', '5432', '4321', '3210',
+  'abcd', 'bcde', 'cdef', 'defg', 'efgh', 'fghi', 'ghij', 'hijk',
+  'ijkl', 'jklm', 'klmn', 'lmno', 'mnop', 'nopq', 'opqr', 'pqrs',
+  'qrst', 'rstu', 'stuv', 'tuvw', 'uvwx', 'vwxy', 'wxyz',
+  'qwerty', 'asdfgh', 'zxcvbn', 'qwertz', 'azerty'
+];
+
+/**
+ * Format raw seconds into clear human-readable academic notation
+ */
+export function formatCrackDuration(seconds: number): string {
+  if (seconds <= 0.001) return '< 1 millisecond (Instant)';
+  if (seconds < 1) return '< 1 second (Instant)';
+  if (seconds < 60) return `${Math.round(seconds)} seconds`;
+  if (seconds < 3600) return `${(seconds / 60).toFixed(1)} minutes`;
+  if (seconds < 86400) return `${(seconds / 3600).toFixed(1)} hours`;
+  if (seconds < 31536000) return `${(seconds / 86400).toFixed(1)} days`;
+  
+  const years = seconds / 31536000;
+  if (years < 1000) return `${Math.round(years)} years`;
+  if (years < 1e6) return `${(years / 1000).toFixed(1)} thousand years`;
+  if (years < 1e9) return `${(years / 1e6).toFixed(1)} million years`;
+  if (years < 1e12) return `${(years / 1e9).toFixed(1)} billion years`;
+  return `${years.toExponential(2)} years (Centuries+)`;
+}
+
+/**
+ * Main Analysis Function
+ */
+export function analyzePassword(pwd: string): PasswordAnalysisResult {
+  const length = pwd.length;
+
+  if (length === 0) {
+    return {
+      passwordLength: 0,
+      hasLower: false,
+      hasUpper: false,
+      hasNumber: false,
+      hasSpecial: false,
+      characterPoolSize: 0,
+      diversityCount: 0,
+      hasRepeatedChars: false,
+      hasSequentialPattern: false,
+      hasCommonPattern: false,
+      score: 0,
+      tier: 'Weak',
+      tierColor: '#ef4444',
+      estimatedEntropyBits: 0,
+      searchSpaceCombinations: '0',
+      searchSpaceBigIntApprox: 0,
+      checks: [
+        { id: 'len', label: 'At least 12 characters', passed: false, type: 'requirement' },
+        { id: 'lower', label: 'Contains lowercase letters', passed: false, type: 'requirement' },
+        { id: 'upper', label: 'Contains uppercase letters', passed: false, type: 'requirement' },
+        { id: 'number', label: 'Contains numbers', passed: false, type: 'requirement' },
+        { id: 'special', label: 'Contains special characters', passed: false, type: 'requirement' },
+      ],
+      warnings: [],
+      recommendations: ['Enter a password to begin heuristic security evaluation.'],
+      crackEstimates: [],
+      scoreBreakdown: { lengthScore: 0, varietyScore: 0, diversityBonus: 0, penalties: 0 }
+    };
+  }
+
+  const hasLower = /[a-z]/.test(pwd);
+  const hasUpper = /[A-Z]/.test(pwd);
+  const hasNumber = /[0-9]/.test(pwd);
+  const hasSpecial = /[^a-zA-Z0-9]/.test(pwd);
+
+  let poolSize = 0;
+  let diversity = 0;
+  if (hasLower) { poolSize += 26; diversity++; }
+  if (hasUpper) { poolSize += 26; diversity++; }
+  if (hasNumber) { poolSize += 10; diversity++; }
+  if (hasSpecial) { poolSize += 33; diversity++; } // Standard printable ASCII symbol count
+  if (poolSize === 0) poolSize = 1;
+
+  // 1. Repeated characters check (3 or more consecutive identical characters or high repetition)
+  const hasRepeatedConsecutive = /(.)\1\1/.test(pwd);
+  const uniqueCharRatio = new Set(pwd.split('')).size / length;
+  const hasRepeatedChars = hasRepeatedConsecutive || (length > 6 && uniqueCharRatio < 0.45);
+
+  // 2. Sequential patterns check
+  const lowerPwd = pwd.toLowerCase();
+  let hasSequentialPattern = false;
+  for (const seq of SEQUENCES) {
+    if (lowerPwd.includes(seq)) {
+      hasSequentialPattern = true;
+      break;
+    }
+  }
+
+  // 3. Common password patterns check
+  let hasCommonPattern = false;
+  let detectedPatternName = '';
+  for (const common of COMMON_PATTERNS) {
+    if (lowerPwd.includes(common)) {
+      hasCommonPattern = true;
+      detectedPatternName = common;
+      break;
+    }
+  }
+
+  // Transparent Scoring Calculation (0 to 100)
+  // Length points (max 40)
+  let lengthScore = 0;
+  if (length >= 16) {
+    lengthScore = 40;
+  } else if (length >= 12) {
+    lengthScore = 32;
+  } else if (length >= 8) {
+    lengthScore = 20;
+  } else if (length >= 6) {
+    lengthScore = 10;
+  } else {
+    lengthScore = 4;
+  }
+
+  // Character Variety Points (max 35)
+  let varietyScore = 0;
+  if (hasLower) varietyScore += 8;
+  if (hasUpper) varietyScore += 8;
+  if (hasNumber) varietyScore += 9;
+  if (hasSpecial) varietyScore += 10;
+
+  // Diversity Bonus (max 15)
+  let diversityBonus = 0;
+  if (diversity === 4) diversityBonus = 15;
+  else if (diversity === 3) diversityBonus = 8;
+  else if (diversity === 2) diversityBonus = 3;
+
+  // Long passphrase bonus (e.g. 20+ chars or 16+ chars with hyphens/spaces and diverse letter count)
+  let passphraseBonus = 0;
+  const uniqueCount = new Set(pwd.split('')).size;
+  if (length >= 20 && uniqueCount >= 10 && !hasSequentialPattern) {
+    passphraseBonus = 20;
+  } else if (length >= 16 && (pwd.includes('-') || pwd.includes(' ') || pwd.includes('_')) && uniqueCount >= 8) {
+    passphraseBonus = 15;
+  }
+
+  // Penalties
+  let penalties = 0;
+  if (length < 8) penalties += 20;
+  else if (length < 12) penalties += 8;
+
+  if (hasRepeatedChars) penalties += 15;
+  if (hasSequentialPattern) penalties += 15;
+  if (hasCommonPattern) penalties += 25;
+  if (diversity <= 1 && length < 16) penalties += 15;
+
+  let rawScore = lengthScore + varietyScore + diversityBonus + passphraseBonus - penalties;
+  const score = Math.max(0, Math.min(100, Math.round(rawScore)));
+
+  // Tier assignment
+  let tier: 'Weak' | 'Medium' | 'Strong' = 'Weak';
+  let tierColor = '#ef4444'; // Red
+  if (score >= 70) {
+    tier = 'Strong';
+    tierColor = '#10b981'; // Emerald
+  } else if (score >= 40) {
+    tier = 'Medium';
+    tierColor = '#f59e0b'; // Amber
+  }
+
+  // Estimated Entropy (Bits): E = L * log2(R)
+  const estimatedEntropyBits = poolSize > 0 ? Math.round(length * Math.log2(poolSize) * 10) / 10 : 0;
+
+  // Search Space Combinations
+  const approxCombinations = Math.pow(poolSize, length);
+  let combinationsString = '';
+  if (approxCombinations < 1e6) {
+    combinationsString = Math.round(approxCombinations).toLocaleString();
+  } else {
+    combinationsString = approxCombinations.toExponential(2);
+  }
+
+  // Checks checklist
+  const checks: SecurityCheckItem[] = [
+    {
+      id: 'len',
+      label: 'At least 12 characters',
+      passed: length >= 12,
+      type: 'requirement',
+      detail: `Current: ${length} character${length === 1 ? '' : 's'}`
+    },
+    {
+      id: 'lower',
+      label: 'Contains lowercase letters',
+      passed: hasLower,
+      type: 'requirement',
+      detail: hasLower ? 'Detected' : 'Missing'
+    },
+    {
+      id: 'upper',
+      label: 'Contains uppercase letters',
+      passed: hasUpper,
+      type: 'requirement',
+      detail: hasUpper ? 'Detected' : 'Missing'
+    },
+    {
+      id: 'number',
+      label: 'Contains numbers',
+      passed: hasNumber,
+      type: 'requirement',
+      detail: hasNumber ? 'Detected' : 'Missing'
+    },
+    {
+      id: 'special',
+      label: 'Contains special characters',
+      passed: hasSpecial,
+      type: 'requirement',
+      detail: hasSpecial ? 'Detected' : 'Missing (!@#$)'
+    }
+  ];
+
+  // Warnings
+  const warnings: string[] = [];
+  if (length < 8) warnings.push('Password is critically short (< 8 characters).');
+  else if (length < 12) warnings.push('Password is shorter than modern 12-character baseline.');
+  if (hasRepeatedChars) warnings.push('Repeated character patterns detected.');
+  if (hasSequentialPattern) warnings.push('Sequential character or keyboard pattern detected.');
+  if (hasCommonPattern) warnings.push(`Common password pattern detected ("${detectedPatternName}").`);
+
+  // Actionable Recommendations
+  const recommendations: string[] = [];
+  if (length < 12) {
+    recommendations.push('Increase the password length to at least 12 characters (16+ recommended).');
+  }
+  if (!hasLower || !hasUpper) {
+    recommendations.push('Combine both uppercase (A-Z) and lowercase (a-z) letters to increase search space.');
+  }
+  if (!hasNumber) {
+    recommendations.push('Add numerical digits (0-9) at non-predictable positions.');
+  }
+  if (!hasSpecial) {
+    recommendations.push('Incorporate punctuation and symbols (!@#$%^&*) to maximize character diversity.');
+  }
+  if (hasRepeatedChars) {
+    recommendations.push('Avoid consecutive repeating characters (such as "aaa" or "111").');
+  }
+  if (hasSequentialPattern) {
+    recommendations.push('Do not reuse predictable alphabetical or keyboard sequences (such as "1234" or "qwerty").');
+  }
+  if (hasCommonPattern) {
+    recommendations.push('Avoid dictionary words and common phrases. Consider using a 4-word random passphrase.');
+  }
+  if (recommendations.length === 0) {
+    recommendations.push('Excellent structure! Consider saving this password in a secure password manager and enabling Multi-Factor Authentication (MFA).');
+  }
+
+  // Illustrative Crack Time Estimates under 3 Assumed Rates
+  // Note: These are illustrative educational calculations based on exhaustive uniform search space / 2 (average search)
+  const avgCombinations = approxCombinations / 2;
+
+  const scenarios = [
+    {
+      scenario: 'Online Attack (Rate-Limited)',
+      ratePerSecond: 100,
+      rateLabel: '100 guesses/sec',
+      assumption: 'Assumes strict online web server throttling, CAPTCHA, or account lockout policy.'
+    },
+    {
+      scenario: 'Offline Fast CPU',
+      ratePerSecond: 1e7, // 10 million / sec
+      rateLabel: '10,000,000 guesses/sec',
+      assumption: 'Assumes attacker obtained hashed database and tests on single multi-core desktop CPU.'
+    },
+    {
+      scenario: 'High-End Multi-GPU Rig',
+      ratePerSecond: 1e11, // 100 billion / sec
+      rateLabel: '100,000,000,000 guesses/sec',
+      assumption: 'Assumes offline cracking on dedicated high-performance GPU cluster (e.g. 8x RTX 4090).'
+    }
+  ];
+
+  const crackEstimates: CrackTimeEstimate[] = scenarios.map(sc => {
+    const rawSec = avgCombinations / sc.ratePerSecond;
+    return {
+      scenario: sc.scenario,
+      ratePerSecond: sc.ratePerSecond,
+      rateLabel: sc.rateLabel,
+      seconds: rawSec,
+      displayTime: formatCrackDuration(rawSec),
+      assumption: sc.assumption
+    };
+  });
+
+  return {
+    passwordLength: length,
+    hasLower,
+    hasUpper,
+    hasNumber,
+    hasSpecial,
+    characterPoolSize: poolSize,
+    diversityCount: diversity,
+    hasRepeatedChars,
+    hasSequentialPattern,
+    hasCommonPattern,
+    detectedPatternName: hasCommonPattern ? detectedPatternName : undefined,
+    score,
+    tier,
+    tierColor,
+    estimatedEntropyBits,
+    searchSpaceCombinations: combinationsString,
+    searchSpaceBigIntApprox: Math.log10(approxCombinations || 1),
+    checks,
+    warnings,
+    recommendations,
+    crackEstimates,
+    scoreBreakdown: {
+      lengthScore,
+      varietyScore,
+      diversityBonus,
+      penalties
+    }
+  };
+}
