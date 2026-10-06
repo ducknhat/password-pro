@@ -3,8 +3,8 @@
 ## III. Materials and Methods
 
 ### 4.1 Ethical and Privacy Framework
-Conducting security research on user credentials carries significant privacy and ethical liabilities [6]. To ensure compliance with academic research standards and user privacy:
-1. **Zero External Communication:** The analysis engine is executed exclusively within the user's local web browser execution context via TypeScript.
+Conducting security research on user credentials carries significant privacy and ethical liabilities [5]. To ensure compliance with academic research standards and user privacy:
+1. **Local Browser Execution:** The analysis engine executes entirely within the user's local web browser execution context via TypeScript, without transmitting entered text to an application backend.
 2. **Zero In-Browser Storage:** No persistent state mechanisms (such as `localStorage`, `sessionStorage`, cookies, or `IndexedDB`) are utilized.
 3. **Purely Synthetic Evaluation Data:** Experimental evaluations are conducted strictly on synthetically generated test strings. No breached passwords, leaked database collections, or live student credentials were collected or stored.
 
@@ -55,4 +55,4 @@ Where $V_{\text{guess}}$ represents an illustrative assumed guessing rate across
 2. **Offline Fast Desktop Guessing:** $V_2 = 10^7$ (10 million) guesses/sec (illustrative rate modeling desktop recovery of unsalted fast hashes).
 3. **High-Performance Cluster Guessing:** $V_3 = 10^{11}$ (100 billion) guesses/sec (illustrative rate modeling high-end hardware targeting fast hash algorithms).
 
-All guessing time displays explicitly state that they are illustrative upper-bound calculations assuming uniform brute-force searches [3]. Real cracking speed depends heavily on password hashing algorithm, work factor, hardware, attack strategy, leaked information, and password structure.
+All guessing time displays explicitly state that they are illustrative upper-bound calculations assuming uniform brute-force searches [13]. Real cracking speed depends heavily on password hashing algorithm, work factor, hardware, attack strategy, leaked information, and password structure.

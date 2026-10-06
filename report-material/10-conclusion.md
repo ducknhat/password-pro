@@ -10,7 +10,7 @@ By eliminating complex backend architectures and executing entirely within clien
 - Illustrative crack times across online vs. offline attacker profiles
 - One-way cryptographic hashing and salting via the browser Web Crypto API
 
-Empirical evaluation on 150 synthetic passwords across five structural categories yielded findings consistent with the educational thesis: **length mathematically scales combinatorial search complexity**. Multi-word passphrases (averaging 31.1 characters) produced an average theoretical character-space entropy estimate of 182.9 bits under the uniform-character assumption with 21 of 30 samples (70.0%) classified as Strong, whereas superficially complex short passwords containing numbers and symbols scored an average of only 10.5 / 100 due to predictable pattern penalties. Finally, the project emphasized that passwords must not exist in isolation, highlighting modern defense-in-depth strategies including slow Key Derivation Functions (Argon2id), unique cryptographic salts, rate limiting, and Multi-Factor Authentication (MFA) [3].
+Empirical evaluation on 150 synthetic passwords across five structural categories yielded findings consistent with the educational thesis: **length mathematically scales combinatorial search complexity**. Multi-word passphrases (averaging 31.1 characters) produced an average theoretical character-space entropy estimate of 182.9 bits under the uniform-character assumption with 21 of 30 samples (70.0%) classified as Strong, whereas superficially complex short passwords containing numbers and symbols scored an average of only 10.5 / 100 due to predictable pattern penalties. Finally, the project emphasized that passwords must not exist in isolation, highlighting modern defense-in-depth strategies including slow Key Derivation Functions (Argon2id), unique cryptographic salts, rate limiting, and Multi-Factor Authentication (MFA) [13].
 
 ---
 
@@ -20,27 +20,27 @@ Empirical evaluation on 150 synthetic passwords across five structural categorie
 
 [2] Bonneau, J., Herley, C., van Oorschot, P. C., and Stajano, F. 2012. The quest to replace passwords: A framework for comparative evaluation of web authentication schemes. In *Proceedings of the 2012 IEEE Symposium on Security and Privacy (S&P '12)*. IEEE, 553–567. DOI: https://doi.org/10.1109/SP.2012.44.
 
-[3] Grassi, P. A., Fenton, J. L., Newton, E. M., Perlner, R. A., Regenscheid, A. R., Burr, W. E., Richer, J. P., Lefkovitz, N. B., Dankner, J. M., and Choong, Y.-Y. 2017. Digital Identity Guidelines: Authentication and Lifecycle Management. NIST Special Publication 800-63B. National Institute of Standards and Technology. DOI: https://doi.org/10.6028/NIST.SP.800-63b.
+[3] Hunt, T. 2018. I've Just Launched Pwned Passwords V2 with Half a Billion Passwords. *Troy Hunt Blog* (Feb. 22, 2018). Retrieved from https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/
 
-[4] Hunt, T. 2018. Pwned Passwords and k-anonymity: Protecting users at scale. *Troy Hunt Research Publication*. https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/
+[4] Kaliski, B. 2000. PKCS #5: Password-Based Cryptography Specification Version 2.0. RFC 2898. Internet Engineering Task Force. DOI: https://doi.org/10.17487/RFC2898.
 
-[5] Kaliski, B. 2000. PKCS #5: Password-Based Cryptography Specification Version 2.0. RFC 2898. Internet Engineering Task Force. DOI: https://doi.org/10.17487/RFC2898.
+[5] Kenneally, E. and Dittrich, D. 2012. The Menlo Report: Ethical Principles Guiding Information and Communication Technology Research. Technical Report. U.S. Department of Homeland Security.
 
-[6] Kenneally, E. and Dittrich, D. 2012. The Menlo Report: Ethical Principles Guiding Information and Communication Technology Research. Technical Report. U.S. Department of Homeland Security.
+[6] Komanduri, S., Shay, R., Kelley, P. G., Mazurek, M. L., Bauer, L., Christin, N., Cranor, L. F., and Egelman, S. 2011. Of passwords and people: Measuring the effect of password-composition policies. In *Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI '11)*. ACM, 2595–2604. DOI: https://doi.org/10.1145/1978942.1979321.
 
-[7] Komanduri, S., Shay, R., Kelley, P. G., Mazurek, M. L., Bauer, L., Christin, N., Cranor, L. F., and Egelman, S. 2011. Of passwords and people: Measuring the effect of password-composition policies. In *Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI '11)*. ACM, 2595–2604. DOI: https://doi.org/10.1145/1978942.1979321.
+[7] National Institute of Standards and Technology. 2015. Secure Hash Standard (SHS). Federal Information Processing Standards Publication (FIPS PUB) 180-4. U.S. Department of Commerce. DOI: https://doi.org/10.6028/NIST.FIPS.180-4.
 
-[8] National Institute of Standards and Technology. 2015. Secure Hash Standard (SHS). Federal Information Processing Standards Publication (FIPS PUB) 180-4. U.S. Department of Commerce. DOI: https://doi.org/10.6028/NIST.FIPS.180-4.
+[8] Oechslin, P. 2003. Making a faster cryptanalytic time-memory trade-off. In *Advances in Cryptology — CRYPTO 2003*. Lecture Notes in Computer Science, vol. 2729. Springer, 617–630. DOI: https://doi.org/10.1007/978-3-540-45146-4_36.
 
-[9] Oechslin, P. 2003. Making a faster cryptanalytic time-memory trade-off. In *Advances in Cryptology — CRYPTO 2003*. Lecture Notes in Computer Science, vol. 2729. Springer, 617–630. DOI: https://doi.org/10.1007/978-3-540-45146-4_36.
+[9] Percival, C. 2009. Stronger key derivation via sequential memory-hard functions. In *Proceedings of BSDCan 2009: The Technical BSD Conference* (Ottawa, Canada, May 2009). (Standardized in IETF RFC 7914, 2016).
 
-[10] Percival, C. 2009. Stronger key derivation via sequential memory-hard functions. In *Proceedings of BSDCan 2009: The Technical BSD Conference*.
+[10] Provos, N. and Mazières, D. 1999. A future-adaptable password scheme. In *Proceedings of the FREENIX Track: 1999 USENIX Annual Technical Conference*. USENIX Association, 81–91.
 
-[11] Provos, N. and Mazières, D. 1999. A future-adaptable password scheme. In *Proceedings of the FREENIX Track: 1999 USENIX Annual Technical Conference*. USENIX Association, 81–91.
+[11] Shannon, C. E. 1948. A mathematical theory of communication. *Bell System Technical Journal* 27, 3 (1948), 379–423. DOI: https://doi.org/10.1002/j.1538-7305.1948.tb01338.x.
 
-[12] Shannon, C. E. 1948. A mathematical theory of communication. *Bell System Technical Journal* 27, 3 (1948), 379–423. DOI: https://doi.org/10.1002/j.1538-7305.1948.tb01338.x.
+[12] Steube, J. 2020. Hashcat: Advanced password recovery utility. Documentation and benchmark architecture. https://hashcat.net/hashcat/
 
-[13] Steube, J. 2020. Hashcat: Advanced password recovery utility. Documentation and benchmark architecture. https://hashcat.net/hashcat/
+[13] Temoshok, D., Fenton, J. L., Choong, Y.-Y., Lefkovitz, N., Regenscheid, A., Galluzzo, R., and Richer, J. P. 2025. Digital Identity Guidelines: Authentication and Authenticator Management. NIST Special Publication 800-63B-4. National Institute of Standards and Technology. DOI: https://doi.org/10.6028/NIST.SP.800-63B-4.
 
 [14] Thomas, K., Li, F., Zand, A., Barrett, J., Ranieri, G., Invernizzi, L., Markov, Y., Comanescu, O., Eranti, V., Moscicki, A., Margolis, D., Paxson, V., and Bursztein, E. 2017. Data breaches, phishing, or malware? Understanding the risks of stolen credentials. In *Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications Security (CCS '17)*. ACM, 1421–1434. DOI: https://doi.org/10.1145/3133956.3134067.
 

@@ -26,7 +26,7 @@
 
 ### Question 3: What is password hashing?
 - **Simple English Answer:**  
-  "Password hashing is a one-way mathematical function. You put a password in, and you get a scrambled fixed-length string out. It is impossible to turn that scrambled string back into the original password."
+  "Password hashing is a one-way mathematical function. You put a password in, and you get a scrambled fixed-length string out. It is computationally infeasible to invert that scrambled string back into the original password without guessing."
 - **Technical Answer:**  
   "Cryptographic hashing is a deterministic, one-way algorithm that maps an arbitrary-length message to a fixed-size bit string (a digest). It provides strong pre-image resistance and collision resistance, meaning it is computationally infeasible to invert the function or find two distinct inputs yielding the same digest."
 
@@ -36,7 +36,7 @@
 - **Simple English Answer:**  
   "A salt is a random string of data added to the password before hashing. Because every user has a different salt, two users with the same password will have completely different hashes. This stops attackers from using precomputed tables to crack thousands of passwords at once."
 - **Technical Answer:**  
-  "A cryptographic salt is a cryptographically random byte sequence (typically 128 bits) appended to the plaintext password prior to key derivation. Salting guarantees digest uniqueness across identical credentials, completely invalidating precomputed lookup attacks such as Rainbow Tables and forcing attackers to crack each stolen hash individually."
+  "A cryptographic salt is a cryptographically random byte sequence (typically 128 bits) appended to the plaintext password prior to key derivation. Salting ensures digest uniqueness across identical credentials, neutralizing precomputed lookup attacks such as Rainbow Tables and forcing attackers to crack each stolen hash individually."
 
 ---
 
@@ -58,7 +58,7 @@
 
 ### Question 7: Why is SHA-256 not ideal for production password storage?
 - **Simple English Answer:**  
-  "SHA-256 is designed to be very fast. It was made to verify files quickly. But that speed helps hackers! Modern computers can test more than 100 billion SHA-256 guesses per second. For passwords, we need slow functions like Argon2id or bcrypt."
+  "SHA-256 is designed to be fast, which makes large-scale password guessing substantially cheaper for attackers. Modern graphics cards can test billions of SHA-256 guesses per second. For password storage, we need slow, memory-hard functions like Argon2id or bcrypt."
 - **Technical Answer:**  
   "SHA-256 is a general-purpose cryptographic hash optimized for maximum throughput and low latency. Because it requires negligible CPU memory and simple arithmetic logic, it can be parallelized massively on consumer GPUs and custom ASICs. Storing passwords requires deliberate computational latency and high memory bandwidth, provided only by memory-hard Key Derivation Functions like Argon2id, bcrypt, or scrypt."
 
@@ -72,25 +72,25 @@
 
 ---
 
-### Question 9: What are the limitations of your project?
+### Question 9: Is PasswordGuard a real security product?
 - **Simple English Answer:**  
-  "Our project is an educational tool, not a commercial security product. Our score is a heuristic estimate, our crack times assume simple computer guessing, and our experiment used 150 synthetic passwords rather than real leaked accounts."
+  "No. It is an educational tool. Its score is a heuristic designed to demonstrate how password structure affects our scoring model."
 - **Technical Answer:**  
-  "Our project has several formal limitations: the score is an educational heuristic rather than a formal compliance standard; Shannon entropy assumes uniform random distribution, whereas human passwords exhibit cognitive bias; brute-force times assume exhaustive search rather than targeted rule-based cracking; and SHA-256 is used strictly for pedagogical demonstration rather than production authentication."
+  "PasswordGuard is strictly an educational tool and prototype. The 0–100 score is a rule-based heuristic designed to illustrate structural password attributes and combinatorial principles. It is not an audited commercial product, a mathematical proof, or a certified compliance validation engine."
 
 ---
 
 ### Question 10: How did you ensure user passwords are safe in your application?
 - **Simple English Answer:**  
-  "Our app runs 100% in the user's web browser. We do not have a backend server, we do not save passwords in local storage, and we send zero data over the internet. When you close the browser tab, the password is completely gone."
+  "PasswordGuard is designed to analyze passwords locally in the browser. It has no backend server and does not transmit entered text over the network. The application does not intentionally persist entered passwords after the session."
 - **Technical Answer:**  
-  "We implemented a strict privacy-by-design architecture. Password evaluation is performed purely in client-side memory using reactive React state and TypeScript. No network requests are dispatched, no telemetry or third-party tracking scripts are loaded, and no browser storage APIs (localStorage, IndexedDB, cookies) are ever utilized."
+  "We implemented client-side local evaluation using TypeScript and React state. No network requests are dispatched, no telemetry is loaded, and no persistent browser storage APIs (such as localStorage, IndexedDB, or cookies) are utilized for password retention."
 
 ---
 
 ### Question 11: What is a passphrase, and why is it better than a complex short password?
 - **Simple English Answer:**  
-  "A passphrase is made of several random words, like 'correct-horse-battery-staple'. It is better because it is very long, which makes it nearly impossible for computers to guess, yet easy for a human to remember as a mental picture."
+  "A passphrase is made of several random words, like 'correct-horse-battery-staple'. It is better because it is very long, which gives it a massive combinatorial search space that is computationally infeasible for attackers to guess exhaustively, yet easy for a human to remember as a mental picture."
 - **Technical Answer:**  
   "A passphrase combines four or more independent dictionary words. Because search space scales exponentially with length ($R^L$), a 28-character passphrase provides vastly superior combinatorial resistance compared to an 8-character string with symbols. Furthermore, passphrases reduce cognitive fatigue, eliminating the user tendency to write credentials on insecure post-it notes."
 
@@ -186,7 +186,7 @@
 
 ### Question 23: Does entropy mean the password is actually random?
 - **Simple English Answer:**  
-  "No. Our app calculates theoretical character-space entropy, which assumes every character was chosen completely at random. But humans are not random—people use familiar words and dates, so human passwords have much less real entropy than our formula shows."
+  "No. It is a theoretical character-space estimate under a uniform-selection assumption. Human-created passwords are usually more predictable."
 - **Technical Answer:**  
   "The metric calculated in PasswordGuard ($E = L \times \log_2 R$) is an upper-bound theoretical character-space estimate under an ideal uniform-character distribution. It does not measure true empirical cognitive entropy. Human-generated passwords suffer from heavy natural language collocations and keyboard habits, making actual guessability substantially higher than the theoretical upper bound."
 
@@ -194,7 +194,7 @@
 
 ### Question 24: Did you actually crack these passwords with a GPU rig?
 - **Simple English Answer:**  
-  "No, we did not run cracking software or GPUs. The crack times in our app are mathematical calculations based on assumed guessing speeds to help students visualize the huge difference between short and long passwords."
+  "No. We did not perform password cracking. The application uses theoretical search-space calculations and illustrative guessing-rate assumptions."
 - **Technical Answer:**  
   "No physical cracking attacks or hardware benchmarks were conducted. The crack time displays are educational mathematical projections calculated as $(R^L / 2) / V_{\text{guess}}$ across three standardized illustrative guessing rates (100, $10^7$, and $10^{11}$ guesses/sec). Real cracking speeds depend heavily on the target KDF work factor, salt configuration, dictionary rules, and adversary hardware."
 
@@ -202,7 +202,7 @@
 
 ### Question 25: Why did you use synthetic passwords instead of real leaked password dumps?
 - **Simple English Answer:**  
-  "Using real leaked passwords would violate ethical research rules and could expose real people's accounts. Using 150 synthetic passwords lets us test each specific pattern safely without privacy risks."
+  "We wanted a controlled experiment without collecting real credentials. However, synthetic data also limits how well the results represent real users."
 - **Technical Answer:**  
   "In accordance with ICT research ethics guidelines like the Menlo Report, handling live user credentials or breached personal databases introduces severe privacy liabilities and ethical risks. Synthetic sampling allowed us to systematically isolate structural variables—such as length, composition, and dictionary substrings—in a safe, fully reproducible, and ethically sound manner."
 

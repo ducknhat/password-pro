@@ -354,3 +354,44 @@ A comprehensive audit and finalization pass was completed to achieve full academ
 - **Academic Readiness:** 100% prepared. Citations verified, references mapped, documentation synchronized, and overclaims eliminated.
 - **Next Phase:** FINAL ARTIFACT PRODUCTION (Final DOCX report, Final PDF paper, Final PowerPoint slides, Final spoken presentation script, and Final Q&A rehearsal).
 
+---
+
+## 14. Final Reference Integrity Pass
+
+A strict, independent verification pass was executed to ensure absolute reference integrity, bibliographic precision, and academic consistency across all materials:
+
+1. **NIST SP 800-63B Correction:**
+   - Identified that NIST SP 800-63B Rev 3 (Grassi et al., 2017) was superseded by **NIST SP 800-63B-4** (Digital Identity Guidelines: Authentication and Authenticator Management), finalized in July 2025 by David Temoshok, James Fenton, Yee-Yin Choong, Naomi Lefkovitz, Ryan Regenscheid, Paul A. Galluzzo, and Justin Richer (DOI: 10.6028/NIST.SP.800-63B-4).
+   - Re-indexed the reference alphabetically under Temoshok et al. as reference **[13]**, shifting subsequent and preceding index numbers accordingly.
+   - Verified that all claims asserting "current NIST guidance" adhere to SP 800-63B-4 mandates (minimum 8 characters, support up to 64+ for passphrases, ban on arbitrary composition rules, mandatory breached credential screening, rate-limiting, and memory-hard KDF verifiers).
+
+2. **Troy Hunt / Pwned Passwords V2 Correction:**
+   - Corrected bibliographic record from a fabricated "Cloudflare / HIBP Technical Report" to the authentic primary source: an industry technical web release/blog post (*Troy Hunt. 2018. I've Just Launched Pwned Passwords V2 with Half a Billion Passwords. Troy Hunt Blog, Feb. 22, 2018*).
+   - Accurately reclassified from "peer-reviewed report" to "Industry Web Release / Technical Blog", preserving academic honesty.
+
+3. **Colin Percival / scrypt Correction:**
+   - Corrected venue description for Colin Percival (2009) *Stronger Key Derivation via Sequential Memory-Hard Functions* from "Peer-Reviewed Conference" to "Technical Conference Paper (BSDCan 2009)". Noted subsequent formal Internet standard specification in IETF RFC 7914 (2016).
+
+4. **Reference Verification Summary:**
+   - **Number of references checked:** 17
+   - **Number corrected:** 3 (NIST SP 800-63B-4 standard/authors, Troy Hunt classification, Colin Percival classification)
+   - **Number replaced:** 0 (all genuine primary works retained)
+   - **Number removed:** 0
+   - **Number still uncertain / manual verification needed:** 0 (all 17 verified against primary authoritative databases: NIST CSRC, RFC Editor, ACM DL, IEEE Xplore, USENIX, SpringerLink)
+
+5. **Q&A Claim Corrections (`qa-preparation.md`):**
+   - Softened Q3 from "impossible to turn scrambled string back" to "computationally infeasible to invert without guessing".
+   - Softened Q4 salting claim from "guarantees" to "ensures digest uniqueness".
+   - Replaced Q7 "Modern computers can test more than 100 billion SHA-256 guesses per second" with fast-hash economic advantage explanation: "SHA-256 is designed to be fast, which makes large-scale password guessing substantially cheaper for attackers. Modern graphics cards can test billions of SHA-256 guesses per second. For password storage, we need slow, memory-hard functions like Argon2id or bcrypt."
+   - Refined Q10 from "send zero data over the internet... completely gone" to measured architectural notice: "PasswordGuard is designed to analyze passwords locally in the browser. It has no backend server and does not transmit entered text over the network. The application does not intentionally persist entered passwords after the session."
+   - Aligned Q9, Q23, Q24, Q25 Simple English answers directly with required academic defense scripts (educational heuristic vs real product; theoretical uniform entropy vs cognitive predictability; assumed guessing rates vs real cracking; synthetic dataset ethics and limitations).
+
+6. **Privacy Wording Corrections:**
+   - Updated `src/components/AnalyzerView.tsx` from "Privacy Guarantee: All analysis runs 100% inside your browser... never saved, never logged, and never transmitted over the internet" to "Privacy Notice: PasswordGuard is designed to perform password analysis locally in the browser and does not include an application backend for password submission. Entered text is not intentionally persisted after the session."
+   - Updated `src/components/CommonThreatsView.tsx` offline cracking impact from "test over 100 billion guesses per second" to "Fast hash functions make large-scale offline password guessing substantially cheaper for attackers than memory-hard functions."
+   - Updated `presentation-outline.md` Slide 5 to eliminate absolute privacy assertions.
+
+7. **Report Consistency & In-Text Citation Alignment:**
+   - Updated all bracketed in-text citations across `report-material/01-abstract.md`, `02-introduction.md`, `03-background.md`, `04-methodology.md`, `06-experiment.md`, `08-discussion.md`, `09-limitations.md`, and `10-conclusion.md` to map 1:1 with the updated 17-item alphabetical bibliography.
+   - Every citation is cited at least once; zero orphaned entries; zero unmapped citations.
+

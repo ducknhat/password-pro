@@ -25,7 +25,7 @@ export const CommonThreatsView: React.FC = () => {
       title: '3. Brute-Force & Dictionary Attacks',
       icon: <ShieldAlert size={20} color="#ef4444" />,
       desc: 'Automated tools (Hashcat, John the Ripper) exhaustively testing millions of combinations or common word mutations.',
-      impact: 'Fast offline cracking can test over 100 billion guesses per second against weakly hashed databases.'
+      impact: 'Fast hash functions make large-scale offline password guessing substantially cheaper for attackers than memory-hard functions.'
     },
     {
       id: 'stuffing',

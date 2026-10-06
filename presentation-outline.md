@@ -90,18 +90,18 @@
 - **Bullet Points:**
   - Client-side educational single-page web application
   - Built using React 19, Vite, TypeScript, and Vanilla CSS
-  - Runs 100% in local browser memory
-  - Zero storage: passwords are never stored, logged, or transmitted across the network
+  - Runs in local browser execution context
+  - Local processing: passwords are processed in memory without application-level storage or network transmission
 - **Recommended Visual:**
   - High-resolution screenshot of the PasswordGuard main dashboard interface.
 - **Speaker Notes (Simple English):**
   > "To make these concepts easy to learn, we created PasswordGuard. 
   > PasswordGuard is a fast, responsive single-page web application built with React, Vite, and TypeScript. 
-  > We implemented a strict privacy-by-design architecture: 
-  > All calculations execute completely inside your browser's local memory. 
+  > We implemented client-side processing: 
+  > All calculations execute inside your browser's local memory context. 
   > We have no backend server, no database, and no telemetry. 
-  > Passwords entered in the demo are never saved, never logged, and never transmitted over the internet. 
-  > Students can safely evaluate passwords without any privacy risk."
+  > Passwords entered in the demo are processed locally without application-level logging or network transmission. The application does not intentionally persist entered passwords after the session. 
+  > Students can safely evaluate passwords without third-party exposure."
 
 ---
 

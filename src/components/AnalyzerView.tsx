@@ -26,8 +26,7 @@ export const AnalyzerView: React.FC = () => {
       <div className="privacy-banner">
         <Shield size={18} />
         <div>
-          <strong>Privacy Guarantee:</strong> All analysis runs 100% inside your browser's local memory.
-          Entered passwords are never saved, never logged, and never transmitted over the internet.
+          <strong>Privacy Notice:</strong> PasswordGuard is designed to perform password analysis locally in the browser and does not include an application backend for password submission. Entered text is not intentionally persisted after the session.
         </div>
       </div>
 
