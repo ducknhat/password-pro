@@ -3,314 +3,295 @@
 **Course:** English Writing and Presentation Skills (AV3)  
 **Project Title:** PasswordGuard: An Experimental Analysis of Password Strength and Authentication Security  
 **Authors:** Nguyen Duc Nhat (22001594), Hoang Minh Duc (22002598), Pham Tuan Phong (22002621)  
-**Total Presentation Time:** 8–10 minutes (approximately 50–60 seconds per slide)  
+**Target Duration:** 8 to 10 minutes (approximately 50 to 55 seconds per slide, planned for ~8:45 total with comfortable pauses)  
 
 ---
 
-## Presentation Overview & Timing Breakdown
+## Presentation Pacing & Pronunciation Tips
 
-| Slide | Topic | Target Time | Cumulative Time |
-| :---: | :--- | :---: | :---: |
-| **Slide 1** | Title & Opening Audience Interaction | 60 sec | 1:00 |
-| **Slide 2** | The Problem: Memory vs. Search Spaces | 55 sec | 1:55 |
-| **Slide 3** | Authentication Mathematics & $R^L$ Formula | 60 sec | 2:55 |
-| **Slide 4** | Attack Vectors & Defense in Depth | 55 sec | 3:50 |
-| **Slide 5** | PasswordGuard Architecture & Privacy Design | 50 sec | 4:40 |
-| **Slide 6** | Scoring Heuristic & Theoretical Entropy | 60 sec | 5:40 |
-| **Slide 7** | Hashing, Cryptographic Salts & Argon2id | 60 sec | 6:40 |
-| **Slide 8** | Experimental Design: Synthetic Dataset | 55 sec | 7:35 |
-| **Slide 9** | Experimental Results & Observations | 60 sec | 8:35 |
-| **Slide 10** | Limitations, Key Takeaways & Q&A Invite | 55 sec | 9:30 |
-
-*Pacing Tip:* Speak at a steady, calm tempo (around 120–130 words per minute). Pause briefly for 1–2 seconds at slide transitions.
+- **Pacing:** Speak at a comfortable speed of about 120 words per minute. Do not rush.
+- **Pauses:** Take a 1 to 2 second breath when switching slides.
+- **Key Pronunciations:**
+  - **Heuristic:** /hjuːˈrɪstɪk/ (*hyoo-RIS-tik*) — A practical rule-of-thumb method.
+  - **Entropy:** /ˈentrəpi/ (*EN-truh-pee*) — A mathematical measure of randomness.
+  - **Exponent:** /ɪkˈspoʊnənt/ (*ik-SPOH-nuhnt*) — The power $L$ in $R^L$.
+  - **Verifier:** /ˈverɪfaɪər/ (*VEH-rih-fy-er*) — What the server stores instead of plaintext.
+  - **Argon2id:** /ˈɑːrɡɒn tuː aɪ diː/ (*AR-gon two eye dee*) — A modern password-hashing function.
 
 ---
 
-## Pronunciation Guide for Technical Terms
+## Slide 1: Title & Opening Question
 
-- **Heuristic:** /hjuːˈrɪstɪk/ (*hyoo-RIS-tik*) — A practical rule-of-thumb method.
-- **Entropy:** /ˈentrəpi/ (*EN-truh-pee*) — A mathematical measure of uncertainty or randomness.
-- **Combinatorial:** /kəmˌbaɪnəˈtɔːriəl/ (*kuhm-by-nuh-TOR-ee-uhl*) — Relating to combinations.
-- **Exponent:** /ɪkˈspoʊnənt/ (*ik-SPOH-nuhnt*) — The mathematical power in $R^L$.
-- **Verifier:** /ˈverɪfaɪər/ (*VEH-rih-fy-er*) — Stored cryptographic credential on a server.
-- **Argon2id:** /ˈɑːrɡɒn tuː aɪ diː/ (*AR-gon two eye dee*) — Memory-hard key derivation function.
-- **Rainbow Table:** /ˈreɪnboʊ ˈteɪbəl/ (*RAYN-boh TAY-buhl*) — Precomputed hash lookup table.
-
----
-
-## Slide 1: Title & Opening Audience Interaction
-
-**Target Duration:** 55–65 seconds  
+**Target Duration:** 55 seconds  
 **Slide Title:** PasswordGuard: An Experimental Analysis of Password Strength and Authentication Security  
 
 ### What to Say:
 
-> "Good morning, respected teacher and fellow classmates.
+> "Good morning, teacher and classmates.
 >
-> Today, my teammates and I are honored to present our project: **PasswordGuard: An Experimental Analysis of Password Strength and Authentication Security**.
+> Today, our team is happy to present our project: **PasswordGuard**.
 >
-> Before we look at any slides, I would like to ask our audience a quick question:
+> Before we start, I want to ask everyone a quick question:
 >
-> **Which of these two passwords do you believe is stronger against a computer attack?**
+> **Which of these two passwords do you think is stronger against a computer attack?**
 >
-> **Option A:** `P@ssw0rd123` — with an uppercase letter, a number, and a symbol.  
-> Or **Option B:** `correct-horse-battery-staple` — four simple, common lowercase words?
+> - **Option A:** `P@ssw0rd123` — with an uppercase letter, a number, and a symbol.  
+> - Or **Option B:** `correct-horse-battery-staple` — four simple lowercase words?
 >
-> Most people immediately guess Option A because they were taught that special characters make a password secure. However, from a mathematical perspective, Option B is vastly harder for an adversary to guess exhaustively.
+> Many people choose Option A because we are used to rules about special characters.
 >
-> *[Optional if running low on time]* This surprising difference is the central reason we built PasswordGuard.
+> But under a simple exhaustive search-space model, Option B actually has a much larger theoretical search space.
 >
-> Let us begin by looking at why password security is still such a difficult challenge for ordinary users."
+> However, real password security also depends on predictability, hashing, rate limiting, and other defenses.
+>
+> *[Optional if running low on time]* This difference between intuition and math is why we built PasswordGuard.
+>
+> Let us look at why passwords are still such a big challenge."
 
 **Transition:**  
-*"Let us turn to Slide 2 to examine the conflict between human memory and computer search power."*
+*"Let us turn to Slide 2 to see the main problem users face."*
 
 ---
 
-## Slide 2: The Problem: Human Memory vs. Combinatorial Search Spaces
+## Slide 2: The Problem: Human Memory vs. Password Guessing
 
-**Target Duration:** 50–55 seconds  
+**Target Duration:** 50 seconds  
 **Slide Title:** The Problem: Human Memory vs. Combinatorial Search Spaces  
 
 ### What to Say:
 
 > "Why are passwords still broken so often?
 >
-> In daily life, an average person manages between 50 and 100 online accounts. Because random, complex strings are almost impossible for human memory to retain, users take predictable shortcuts. They pick simple words, reuse the exact same password across multiple services, or make predictable substitutions, such as changing the letter 'a' to an at-sign (`@`).
+> First, users have too many accounts—often 50 or more. Random strings are very hard for people to remember, so users take shortcuts. They pick simple words, reuse passwords, or make simple changes like replacing the letter 'a' with an at-sign (`@`).
 >
-> At the same time, attackers do not guess passwords one letter at a time. They use automated tools with leaked wordlists containing tens of millions of breached passwords, like the RockYou dataset.
+> Second, attackers do not just guess one letter at a time. They use automated tools with wordlists of millions of leaked passwords.
 >
-> Even worse, traditional password policies created a false sense of security. Demanding one uppercase letter and one number simply taught users to write `Summer2024!`, which modern attack programs crack almost instantly.
+> Third, old complexity rules created a false sense of security. Asking for one capital letter and one number taught people to create passwords like `Summer2024!`. Password-guessing tools can test these predictable patterns very early.
 >
-> *[Optional if running low on time]* PasswordGuard was created as an educational platform to make this mathematical reality clear and interactive."
+> *[Optional if running low on time]* PasswordGuard helps students see these risks through an interactive web tool."
 
 **Transition:**  
-*"Next, on Slide 3, let us look at the mathematical formula that governs password guessing."*
+*"On Slide 3, let us look at the basic math behind password search spaces."*
 
 ---
 
-## Slide 3: Mathematical Foundations: Search Spaces & the Prover-Verifier Model
+## Slide 3: Search Spaces & The Prover-Verifier Model
 
-**Target Duration:** 55–60 seconds  
+**Target Duration:** 55 seconds  
 **Slide Title:** Mathematical Foundations: Search Spaces & the Prover-Verifier Model  
 
 ### What to Say:
 
-> "To understand password defense, we must understand the math behind exhaustive brute-force search.
+> "To understand password defense, we can look at a simple mathematical model.
 >
-> In computer authentication, we follow the **prover-verifier model**. The user proves they know the secret, while the server verifies it against a stored cryptographic verifier without keeping plaintext.
+> In modern systems, the user is the prover and the server is the verifier. The server does not store plaintext; it stores a cryptographic verifier.
 >
-> If an attacker tries to guess every combination, the total search space is calculated by the formula:
+> If an attacker tries every possible combination, the total search space is:
 >
 > **Total Combinations equals $R$ to the power of $L$** ($S = R^L$).
 >
-> Here, $R$ represents the character pool size, and $L$ represents the password length.
+> Here, $R$ is the size of the character pool, and $L$ is the password length.
 >
-> Notice that length $L$ is in the exponent! Because length is an exponent, adding characters expands the search space **exponentially**, while adding character sets only increases the base.
+> In this theoretical search-space model, increasing length has an exponential effect because length is the exponent.
 >
-> Look at the examples on the right: an 8-character password with letters, digits, and symbols has roughly $6.6 \times 10^{15}$ combinations. At an assumed rate of 100 billion guesses per second, that could be searched in roughly 9 hours.
+> Look at the examples on the right: an 8-character password using all printable characters has about $6.6 \times 10^{15}$ combinations.
 >
-> But a 28-character passphrase using only lowercase letters and hyphens yields $1.2 \times 10^{40}$ combinations. Searching that would take more than $10^{21}$ years!
+> But a 28-character passphrase using only lowercase letters and hyphens has about $1.2 \times 10^{40}$ combinations.
 >
-> Length is the most decisive mathematical factor."
+> *[Optional if running low on time]* Notice that the guessing times shown on this slide are illustrative assumed rates, not a hardware benchmark."
 
 **Transition:**  
-*"However, real attackers do not only use brute force. Let us examine common attack threats on Slide 4."*
+*"Next, on Slide 4, let us look at real attack threats and defenses."*
 
 ---
 
 ## Slide 4: Common Password Threats & Defense in Depth
 
-**Target Duration:** 50–55 seconds  
+**Target Duration:** 50 seconds  
 **Slide Title:** Common Password Threats & Defense in Depth  
 
 ### What to Say:
 
-> "Real-world attackers exploit human predictability.
+> "In the real world, attackers use several methods:
 >
-> As shown on the left side of this slide, attackers use:
-> 1. **Wordlists and mutation rules** to test common phrases.
-> 2. **Credential stuffing**, replaying username-password pairs stolen from one breach across hundreds of other websites.
-> 3. **Offline hash cracking**, testing leaked database hashes at high speeds without triggering website lockouts.
-> 4. And **phishing**, which bypasses password complexity entirely.
+> 1. **Wordlists and rules** to guess common words and variations.
+> 2. **Credential stuffing**, replaying stolen username and password pairs across many websites.
+> 3. **Offline hash cracking**, testing leaked database hashes on fast hardware without server lockouts.
+> 4. And **phishing**, which tricks users into typing their passwords directly.
 >
-> Because of these threats, **password security is not the same as authentication security**. A complex password alone cannot protect a user against phishing or database leaks.
+> Because of these threats, password strength alone cannot guarantee security.
 >
-> True security requires **Defense in Depth**, shown on the right:
-> - Users must use **password managers** to keep credentials unique.
-> - Organizations must enforce **Multi-Factor Authentication (MFA)**, so a stolen password alone is useless.
-> - And servers must implement **slow, memory-hard hashing** and rate limiting."
+> We need **Defense in Depth**:
+> - Users should use **password managers** so every account has a unique password.
+> - Services must enforce **Multi-Factor Authentication (MFA)**, so a stolen password alone is not enough to log in.
+> - And servers must use **slow, memory-hard hashing** and rate limiting."
 
 **Transition:**  
-*"Now, let us introduce the tool we designed to demonstrate these concepts: PasswordGuard on Slide 5."*
+*"Now, let us look at how PasswordGuard is designed on Slide 5."*
 
 ---
 
-## Slide 5: PasswordGuard Application Architecture & Privacy Design
+## Slide 5: PasswordGuard Architecture & Privacy Design
 
-**Target Duration:** 45–50 seconds  
+**Target Duration:** 45 seconds  
 **Slide Title:** PasswordGuard: Application Architecture & Privacy Design  
 
 ### What to Say:
 
-> "To make these concepts tangible, we developed **PasswordGuard**.
+> "To demonstrate these ideas in an educational setting, we built **PasswordGuard**.
 >
-> PasswordGuard is a single-page web application built with **React 19, TypeScript, and Vite**.
+> PasswordGuard is a single-page web app built with **React 19, TypeScript, and Vite**.
 >
-> From the very beginning, we prioritized a **client-side privacy model**:
-> - All password analysis, heuristic scoring, and cryptographic calculations happen exclusively inside the user's local browser memory.
-> - We have **no application backend, no database, and zero tracking telemetry**.
-> - Passwords entered in the demo are never transmitted across the network.
+> A key design choice is our local processing approach:
+> - PasswordGuard is designed to process entered passwords locally in the browser.
+> - It does not include an application backend for password submission, and it does not store passwords in a database or send tracking data.
+> - For cryptographic hashing, the app uses the browser's built-in **Web Crypto API**.
 >
-> For cryptographic operations, we interact directly with the browser's native **Web Crypto API**.
->
-> As shown in the diagram on the right, user input flows from reactive browser state directly to our analysis engine and visualization components without external network dependencies."
+> As shown in the diagram, user input stays in local browser state and flows directly to our scoring and hashing components."
 
 **Transition:**  
-*"Let us look closer at how PasswordGuard evaluates passwords on Slide 6."*
+*"On Slide 6, let us look at how PasswordGuard calculates scores."*
 
 ---
 
-## Slide 6: How PasswordGuard Evaluates Passwords: Heuristic & Entropy
+## Slide 6: How PasswordGuard Evaluates Passwords
 
-**Target Duration:** 55–60 seconds  
+**Target Duration:** 55 seconds  
 **Slide Title:** How PasswordGuard Evaluates Passwords: Heuristic & Entropy  
 
 ### What to Say:
 
-> "PasswordGuard implements two distinct evaluation metrics:
+> "PasswordGuard evaluates passwords using two main metrics:
 >
-> First, a **transparent heuristic score from 0 to 100**.  
-> It awards up to 40 base points for length, up to 35 points for character variety, and provides diversity bonuses up to 15 points. It also awards a special 10-point bonus for long passphrases.
+> First, a **transparent heuristic score from 0 to 100**.
+> - **Length points:** up to 40 points, using tiered brackets. For example, 20 points for 8 to 11 characters, and 40 points for 16 characters or more.
+> - **Character variety:** up to 35 points across lowercase, uppercase, digits, and symbols.
+> - **Diversity bonus:** up to 15 bonus points when multiple character types are mixed.
+> - **Passphrase bonus:** up to 20 bonus points for long passphrases with diverse characters or word separators.
 >
-> Crucially, our heuristic applies **subtractive penalties**:
-> - Minus 15 points for sequential characters like `1234` or `qwerty`.
+> The heuristic also subtracts penalties:
+> - Minus 15 points for sequential patterns like `1234` or `qwerty`.
 > - Minus 15 points for repeated characters.
-> - And minus 25 points for known dictionary roots like `password` or `admin`.
+> - Minus 25 points for common dictionary roots like `password` or `admin`.
+> - And length penalties for passwords under 12 characters.
 >
-> Passwords are then classified into **Weak (0–39)**, **Medium (40–69)**, or **Strong (70–100)**.
+> The final score classifies passwords into **Weak (0–39)**, **Medium (40–69)**, or **Strong (70–100)**.
 >
-> Second, we calculate a **theoretical character-space entropy estimate** in bits:
-> $E = L \times \log_2(R)$.  
-> This value assumes uniform random character selection.
->
-> To make this intuitive, we project illustrative search times across three assumed guessing scenarios: 100 guesses per second for rate-limited logins, 10 million for CPU attacks, and 100 billion for GPU clusters.
->
-> *[Optional if running low on time]* We emphasize that these rates are educational mathematical projections, not physical hardware benchmarks."
+> Second, the app calculates a **theoretical character-space entropy estimate** in bits, assuming uniform random selection."
 
 **Transition:**  
-*"Next, on Slide 7, let us look at how servers store passwords using hashing and salts."*
+*"Next, on Slide 7, let us look at password hashing and cryptographic salts."*
 
 ---
 
 ## Slide 7: Password Hashing, Cryptographic Salts & Production Security
 
-**Target Duration:** 55–60 seconds  
+**Target Duration:** 55 seconds  
 **Slide Title:** Password Hashing, Cryptographic Salts, and Production Security  
 
 ### What to Say:
 
-> "In secure systems, servers never store passwords in plain text. Instead, they compute a **cryptographic hash**.
+> "Servers should never store passwords in plain text. Instead, they store a cryptographic hash.
 >
-> A hash function is deterministic and one-way: easy to calculate forward, but practically impossible to reverse. It also exhibits the **Avalanche Effect**: changing just one character flips over 50% of the output bits.
+> A hash function is one-way: easy to compute forward, but practically impossible to reverse.
 >
-> However, raw hashes can be attacked using precomputed lookup tables called **Rainbow Tables**.
+> A well-designed hash exhibits an **avalanche effect**: a small change in the input tends to change roughly half of the output bits.
 >
-> To solve this, servers use a **cryptographic salt**—a 16-byte random value generated per user. Because every salt is unique, identical passwords produce completely different stored hashes, completely invalidating rainbow tables.
+> To protect stored hashes, servers add a **cryptographic salt**—a unique random value for each user.
 >
-> **Important Academic Notice:** PasswordGuard demonstrates hashing using SHA-256 for browser performance and educational clarity.
+> Because every user has a different salt, identical passwords produce completely different stored hashes. Unique salts make traditional precomputed rainbow-table attacks impractical across many users.
 >
-> However, because SHA-256 is designed to be fast, **production systems must never use raw SHA-256 for password storage**. Production backends must use slow, memory-hard Key Derivation Functions like **Argon2id, bcrypt, or scrypt** to resist GPU acceleration."
+> **Important security distinction:**
+> PasswordGuard uses SHA-256 only for educational demonstration in the browser.
+>
+> Because SHA-256 is a fast general-purpose hash, raw SHA-256 is not appropriate for production password storage.
+>
+> Production systems should use password-focused functions such as **Argon2id, bcrypt, scrypt, or PBKDF2** with appropriate parameters."
 
 **Transition:**  
-*"To verify our heuristic scoring model, we conducted a controlled experiment, shown on Slide 8."*
+*"To see how our heuristic behaves, we ran a controlled experiment on Slide 8."*
 
 ---
 
-## Slide 8: Experimental Design: Controlled Evaluation of Heuristic Behavior
+## Slide 8: Experimental Design: Synthetic Dataset
 
-**Target Duration:** 50–55 seconds  
+**Target Duration:** 50 seconds  
 **Slide Title:** Experimental Design: Controlled Evaluation of Heuristic Behavior  
 
 ### What to Say:
 
-> "To evaluate how consistently our heuristic behaves across different password structures, we designed a reproducible experiment.
+> "To test whether our scoring rules behave consistently, we ran a controlled experiment.
 >
-> Following computer science research ethics, we did **not** use real user credentials or breached password dumps.
+> To follow research ethics, we did **not** use real user credentials or leaked databases.
 >
-> Instead, we constructed a **controlled synthetic dataset of 150 passwords**, divided into five structural categories of 30 samples each:
+> Instead, we tested a **controlled synthetic dataset of 150 passwords**, divided into five categories of 30 passwords each:
 > - **Category A — Short Simple:** 3 to 5 characters, like `cat` or `red2`.
 > - **Category B — Common Pattern:** 8 to 12 characters with dictionary roots and digits, like `password123` or `admin2024!`.
-> - **Category C — Medium Complexity:** 11 to 15 characters following enterprise complexity rules, like `BlueSky#49`.
+> - **Category C — Medium Complexity:** 11 to 15 characters with mixed character types, like `BlueSky#49`.
 > - **Category D — Long Passphrases:** 25 to 36 characters with hyphens, like `correct-horse-battery-staple`.
-> - **Category E — Long Random:** 16 pseudo-random characters across all 95 printable ASCII symbols.
+> - **Category E — Long Random:** 16 random characters across all printable symbols.
 >
-> We evaluated all 150 samples through an automated test harness to observe scoring consistency."
+> We ran all 150 passwords through our analyzer using an automated test script."
 
 **Transition:**  
-*"Let us look at the quantitative results on Slide 9."*
+*"Let us examine the results on Slide 9."*
 
 ---
 
-## Slide 9: Experimental Results: Quantitative Observations Across Categories
+## Slide 9: Experimental Results & Observations
 
-**Target Duration:** 55–60 seconds  
+**Target Duration:** 55 seconds  
 **Slide Title:** Experimental Results: Quantitative Observations Across Categories  
 
 ### What to Say:
 
-> "Here are the empirical results from our controlled experiment.
+> "Here are the empirical results from our experiment.
 >
-> Across the 150 synthetic samples, our heuristic classified **59 as Weak, 12 as Medium, and 79 as Strong**.
+> Across all 150 synthetic passwords, our heuristic classified **59 as Weak, 12 as Medium, and 79 as Strong**.
 >
-> Looking at the bar chart on the left:
-> - **Category E (Long Random)** achieved the highest average score of **90.0 out of 100**, with 100% rated Strong.
-> - **Category D (Long Passphrase)** achieved the highest theoretical entropy estimate of **182.9 bits**, with 70% Strong and 30% Medium.
-> - **Category C (Medium Complexity)** achieved an average score of **80.8**, with 93.3% Strong.
+> Looking at the chart:
+> - **Category E (Long Random)** had the highest average score of **90.0 out of 100**, with 100% rated Strong.
+> - **Category D (Long Passphrases)** had the highest theoretical entropy estimate of **182.9 bits**, with 70% Strong and 30% Medium.
+> - **Category C (Medium Complexity)** averaged **80.8 out of 100**, with 93.3% Strong.
 >
-> Now, look closely at **Category B**: even though Category B passwords contained uppercase letters, numbers, and exclamation marks, their average score collapsed to **10.5 out of 100**, and **96.7% were classified as Weak**.
+> Now look at **Category B**: even though these passwords contained uppercase letters, digits, and symbols, their average score collapsed to **10.5 out of 100**, and **96.7% were rated Weak**.
 >
-> This demonstrates that our heuristic successfully penalizes predictable patterns rather than being misled by superficial symbols.
+> This demonstrates that our heuristic heavily penalizes common patterns rather than looking only at character types.
 >
-> Category A averaged only **2.0 out of 100**, accurately reflecting tiny search spaces."
+> Category A averaged **2.0 out of 100**, reflecting its minimal length."
 
 **Transition:**  
-*"Finally, let us discuss our project's limitations and core takeaways on Slide 10."*
+*"Finally, let us review our limitations and key takeaways on Slide 10."*
 
 ---
 
-## Slide 10: Academic Limitations, Core Takeaways & Conclusion
+## Slide 10: Limitations, Key Takeaways & Conclusion
 
-**Target Duration:** 50–55 seconds  
+**Target Duration:** 50 seconds  
 **Slide Title:** Academic Limitations, Core Takeaways, and Conclusion  
 
 ### What to Say:
 
-> "To maintain academic honesty, we must explicitly acknowledge our project's limitations:
-> - **First, the Circularity Constraint:** Our experiment evaluates the internal consistency of the heuristic, not real-world cracking resistance.
-> - **Second, Synthetic Dataset:** Our 150 synthetic samples isolate structural rules, but do not capture the full diversity of real user behavior.
-> - **Third, Theoretical Entropy:** Our entropy metric assumes an ideal uniform distribution, whereas human-created passwords have natural language patterns.
+> "To be academically honest, we must acknowledge our project's limitations:
+> - **First, circularity:** The experiment evaluates the internal consistency of our heuristic rules, rather than testing real-world cracking resistance.
+> - **Second, synthetic dataset:** 150 synthetic samples isolate structural rules, but they do not capture the full variety of real user passwords.
+> - **Third, theoretical entropy:** Our entropy estimate assumes uniform random selection, while real human passwords have predictable habits.
 >
-> Despite these limitations, our core security takeaways remain powerful:
-> 1. **Length dominates the exponent:** Expanding password length provides exponential search-space growth ($R^L$), making memorable passphrases a superior choice.
-> 2. **Superficial complexity fails:** Appending digits or symbols to common words does not protect against modern attack tools.
-> 3. **Defense in Depth is essential:** True security requires combining password managers, slow memory-hard hashing like Argon2id, and universal Multi-Factor Authentication.
+> Despite these limitations, our core security takeaways are clear:
+> 1. In simple search-space models, **length provides an exponential advantage**, making passphrases an effective, memorable approach.
+> 2. **Superficial complexity fails:** Adding `123!` to a dictionary word does not protect against modern attack tools.
+> 3. **Defense in Depth is essential:** Real protection requires password managers, slow memory-hard hashing like Argon2id, and Multi-Factor Authentication.
 >
-> Thank you very much for your time and kind attention.
-> We are now ready and excited to answer your questions!"
+> Thank you very much for your time.
+> We are now ready to answer your questions!"
 
 ---
 
-## Live Demo Plan (Optional 60–90 Second Fallback)
+## Live Demo Fallback Plan (60–90 Seconds)
 
-If the lecturer requests a live demonstration:
+If the lecturer requests a quick demo:
 
-1. **Step 1 (Weak Pattern):** Type `password123`.  
-   *Point out:* Score collapses to Weak (~10/100) due to dictionary and sequence penalties.
-2. **Step 2 (Superficial Complexity):** Type `Password123!`.  
-   *Point out:* Shows why adding an uppercase and symbol still triggers pattern warnings.
-3. **Step 3 (Passphrase Strength):** Type `correct-horse-battery-staple`.  
-   *Point out:* Length reaches 28 characters, passphrase bonus activates, theoretical entropy jumps above 130 bits, score reaches Strong.
-4. **Step 4 (Hashing & Salting Lab):** Click into Hashing Demo.  
-   *Point out:* Type a word, show instant SHA-256 digest; click 'Generate Random Salt' to show that the identical password produces a completely distinct hash.
-5. **Fallback:** If browser crashes or projector fails, refer directly to Slide 5 and Slide 9 figures already embedded in the presentation.
+1. **Weak Example:** Type `password123`. Show that the score drops to Weak (~10/100) due to dictionary penalties.
+2. **Passphrase Example:** Type `correct-horse-battery-staple`. Show that the passphrase bonus activates, theoretical entropy reaches over 130 bits, and score reaches Strong.
+3. **Hashing Demo:** Open the Hashing view. Type any word to show instant SHA-256 output. Click 'Generate Random Salt' to show that adding a unique salt produces a completely different hash digest.
+4. **Fallback:** If technology fails, refer to the architecture diagram on Slide 5 and the results chart on Slide 9.

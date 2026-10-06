@@ -2,178 +2,177 @@
 
 **Course:** English Writing and Presentation Skills (AV3)  
 **Project:** PasswordGuard: An Experimental Analysis of Password Strength and Authentication Security  
-**Target Audience:** University Lecturer and Classmates during Oral Defense  
 **Format:** Each question provides:
-- **Simple Answer:** 1–3 clear, concise sentences in natural spoken English.
-- **Technical Follow-up:** Rigorous, academically precise explanation with cybersecurity terminology.
+- **Simple Answer:** 1–3 short sentences in clear, natural spoken English.
+- **Technical Follow-up:** A concise, academically defensible explanation without exaggerated claims.
 
 ---
 
 ### Question 1: Why did you choose this topic?
 - **Simple Answer:**  
-  "We chose this topic because passwords remain the primary access control for everyday online accounts, yet most users do not understand the math behind how passwords are attacked. We wanted to build an interactive, transparent tool that demonstrates search-space mathematics and cryptographic hashing."
+  "We chose this topic because passwords are used every day, but many people do not understand how computers actually test them. We wanted to build an interactive tool that makes password search spaces and hashing easy to learn."
 - **Technical Follow-up:**  
-  "Credential-based vulnerabilities remain the predominant initial access vector in corporate breaches. Despite decades of security guidelines, users still suffer from cognitive retention bottlenecks that lead to predictable credential reuse. PasswordGuard bridges the gap between theoretical combinatorial security ($R^L$) and practical user perception."
+  "Passwords remain a primary access control mechanism, yet user choices are constrained by human memory limits. This leads to common predictable patterns. We wanted to build an educational tool to demonstrate the difference between superficial complexity and exponential search-space growth ($R^L$)."
 
 ---
 
-### Question 2: What is new or original about PasswordGuard compared to existing meters?
+### Question 2: What is new or original about PasswordGuard compared to standard meters?
 - **Simple Answer:**  
-  "Unlike commercial meters that give a black-box percentage, PasswordGuard is fully transparent, explaining every point gained or penalty lost in real time. In addition, it integrates an interactive Web Crypto hashing lab directly into the browser to show how salts defeat rainbow tables."
+  "Unlike meters that only show a percentage bar, PasswordGuard explains every scoring point and penalty in real time. It also includes an educational hashing lab directly in the browser to show how salts work."
 - **Technical Follow-up:**  
-  "Many client-side meters rely on opaque regular expressions or cloud APIs that send password hashes over the internet. PasswordGuard provides a client-side educational architecture with deterministic, open scoring weights, explicit theoretical character-space entropy bounds ($L \times \log_2 R$), illustrative cracking projections, and an educational cryptographic salting demonstration."
+  "Many commercial meters use opaque rules or send data to cloud APIs. PasswordGuard provides a client-side architecture with deterministic scoring rules, theoretical character-space entropy bounds ($L \times \log_2 R$), illustrative guessing models, and an educational cryptographic salting demonstration."
 
 ---
 
-### Question 3: Is PasswordGuard a commercial security auditing tool?
+### Question 3: Is PasswordGuard a real commercial security product?
 - **Simple Answer:**  
-  "No, PasswordGuard is strictly an educational web application and research prototype. Its score is a heuristic model designed to help students understand password structures, not a certified security compliance standard."
+  "No, PasswordGuard is an educational student project and prototype. Its score is a heuristic rule set created for teaching, not a commercial security standard."
 - **Technical Follow-up:**  
-  "PasswordGuard makes no claim to be an enterprise penetration-testing platform or audited commercial product. Its 0–100 score is a deterministic rule-based heuristic designed for educational illustration. It does not replace industrial password auditing suites or formal policy validation frameworks."
+  "PasswordGuard makes no claim to be a commercial auditing suite or certified compliance validator. Its 0–100 score is a deterministic heuristic designed to illustrate structural attributes and search-space concepts."
 
 ---
 
 ### Question 4: How is the PasswordGuard heuristic score calculated?
 - **Simple Answer:**  
-  "The score starts from zero and awards points for length and character sets, plus bonuses for diversity and long passphrases. Then, it subtracts heavy penalties if it detects sequential numbers, repeated characters, or dictionary words, clamping the final result between 0 and 100."
+  "The score awards points for length, character types, diversity bonuses, and long passphrases. Then it subtracts penalties for repeated characters, sequential patterns, and dictionary words, giving a final score from 0 to 100."
 - **Technical Follow-up:**  
   "The scoring heuristic implements an additive-subtractive model:
-  - Base length score up to 40 points (+4 pts/char up to 6, +2.5 pts/char up to 10, +1 pt/char beyond 10).
-  - Character set variety up to 35 points (lowercase +5, uppercase +10, digits +10, symbols +10).
-  - Character diversity bonus up to 15 points (5 pts for 2 pools, 10 for 3, 15 for 4).
-  - Passphrase bonus of +10 points for strings $\ge 16$ characters with whitespace or hyphen word delimiters.
-  - Subtractive penalties: sequential runs (-15), repeated characters (-15), and known dictionary roots (-25). Raw scores are clamped to $[0, 100]$."
+  - Length points up to 40, using tiered brackets (20 pts for 8–11 chars, 40 pts for $\ge 16$ chars).
+  - Variety points up to 35 (lowercase +8, uppercase +8, digits +9, symbols +10).
+  - Diversity bonus up to 15 (2 pools: +3, 3 pools: +8, 4 pools: +15).
+  - Passphrase bonus up to 20 points for long strings with diverse characters or word delimiters.
+  - Subtractive penalties: length under 12 (-8 or -20), repeated chars (-15), sequential runs (-15), common dictionary roots (-25), and single-pool strings (-15). The raw score is clamped to $[0, 100]$."
 
 ---
 
-### Question 5: Why did you choose the thresholds 0–39 for Weak, 40–69 for Medium, and 70–100 for Strong?
+### Question 5: Why did you choose 0–39 for Weak, 40–69 for Medium, and 70–100 for Strong?
 - **Simple Answer:**  
-  "We chose these three tiers to align with common three-tier user interface models and modern NIST guidelines. A score below 40 reflects short or pattern-heavy strings, while a score of 70 or higher requires either significant length or multi-pool entropy."
+  "We chose these three tiers to give users clear feedback. Scores below 40 represent short or predictable passwords, while scores 70 and above require either strong length or diverse character sets."
 - **Technical Follow-up:**  
-  "The 40 and 70 boundary thresholds divide the 0–100 score into three distinct structural security postures:
-  - Scores below 40 (Weak) fail minimum length standards ($\le 8$ characters) or suffer severe pattern deductions.
-  - Scores from 40 to 69 (Medium) meet basic length criteria (8–12 characters) with moderate pool diversity, representing acceptable non-critical accounts.
-  - Scores 70 and above (Strong) require either length $\ge 16$ characters, multi-word passphrase structure, or complete character-set diversity, aligning with NIST SP 800-63B guidance."
+  "The thresholds divide scores into three intuitive tiers:
+  - Weak (0–39): strings that fail basic length recommendations ($< 8$ characters) or trigger heavy pattern deductions.
+  - Medium (40–69): passwords of moderate length (8–11 characters) with partial diversity.
+  - Strong (70–100): passwords with substantial length ($\ge 16$ characters), passphrase structure, or multi-pool diversity, aligning with modern guidance such as NIST SP 800-63B-4."
 
 ---
 
-### Question 6: Is the entropy displayed in your application real password entropy?
+### Question 6: Is the entropy shown in your application real password entropy?
 - **Simple Answer:**  
-  "No, it is a theoretical character-space entropy estimate calculated under the assumption that all characters are chosen randomly and uniformly. Human passwords are usually much more predictable than this theoretical upper bound."
+  "No, it is a theoretical character-space estimate based on a uniform-character assumption. Human-made passwords usually have lower actual randomness because people choose predictable words and patterns."
 - **Technical Follow-up:**  
-  "Our formula, $E = L \times \log_2(R)$ bits, calculates the maximum theoretical Hartley information capacity across the detected character alphabet $R$. Real human-generated passwords possess significantly lower empirical entropy because human word choices, grammatical rules, and keyboard layouts follow highly biased distributions."
+  "The formula $E = L \times \log_2(R)$ bits measures theoretical character space under an idealized uniform distribution. Real human passwords follow grammatical and keyboard habits, meaning actual guessability is higher than this theoretical upper bound."
 
 ---
 
-### Question 7: Did you physically crack passwords using a GPU cracking rig?
+### Question 7: Did you actually crack passwords on a GPU rig?
 - **Simple Answer:**  
-  "No, we did not perform physical password cracking. The crack times shown in our app are illustrative mathematical projections based on assumed guessing rates."
+  "No, we did not perform physical password cracking. The guessing times in our app are illustrative mathematical projections based on assumed guessing rates."
 - **Technical Follow-up:**  
-  "PasswordGuard conducts no physical cryptanalysis or GPU benchmarking. Crack-time projections are calculated using the expected search-space traversal equation $T = (R^L / 2) / V_{\text{guess}}$ across three standardized educational attack rates: 100 guesses/sec (rate-limited online), $10^7$ guesses/sec (CPU offline), and $10^{11}$ guesses/sec (GPU offline). Actual real-world cracking performance depends heavily on the specific KDF work factor, salt configuration, and adversary hardware."
+  "We did not conduct physical hardware benchmarks or cracking experiments. Time projections are calculated as $T = (R^L / 2) / V_{\text{guess}}$ across three assumed educational rates: 100 guesses/sec (throttled online), $10^7$ guesses/sec (offline desktop), and $10^{11}$ guesses/sec (offline cluster). Real cracking speed depends on the password-hashing function, work factor, hardware, and attack dictionary."
 
 ---
 
 ### Question 8: Why did you use synthetic passwords instead of real leaked password dumps?
 - **Simple Answer:**  
-  "We used synthetic passwords to protect privacy and follow academic research ethics. Generating controlled synthetic passwords allowed us to test specific structural rules safely and reproducibly."
+  "We used synthetic passwords for privacy and research ethics. Testing synthetic passwords allowed us to compare specific password structures safely and reproducibly."
 - **Technical Follow-up:**  
-  "In accordance with cybersecurity research ethics (such as the Menlo Report), handling live user credentials or breached personal databases creates significant ethical and legal liabilities. Synthetic password generation enabled controlled experimental isolation of structural variables—such as length, alphabet composition, and dictionary roots—ensuring complete reproducibility without privacy risks."
+  "Handling real user credentials or breached databases creates significant privacy and ethical liabilities. Using a controlled synthetic dataset ($N = 150$) allowed us to systematically isolate structural variables—such as length, character sets, and dictionary roots—without handling private user data."
 
 ---
 
 ### Question 9: Why did you use SHA-256 in the application?
 - **Simple Answer:**  
-  "We used SHA-256 because it is natively supported by modern web browsers through the Web Crypto API, allowing fast, zero-dependency hashing demonstrations without installing external libraries."
+  "We used SHA-256 because it is built directly into modern web browsers through the Web Crypto API. This allowed us to build a fast, client-side hashing demonstration without external libraries."
 - **Technical Follow-up:**  
-  "The W3C Web Cryptography API (`window.crypto.subtle`) provides native, hardware-accelerated access to SHA-256 within the browser sandbox. Because modern browsers do not natively provide standardized Web Crypto interfaces for Argon2id or bcrypt, SHA-256 served as the ideal primitive to demonstrate deterministic digest generation, the avalanche effect, and salt mechanics."
+  "The W3C Web Cryptography API (`crypto.subtle.digest`) natively supports SHA-256 in all modern browsers. Because browsers do not include native APIs for Argon2id or bcrypt, SHA-256 was the most practical choice to demonstrate one-way hashing, the avalanche effect, and salting in a browser environment."
 
 ---
 
 ### Question 10: Why is SHA-256 NOT recommended for production password storage?
 - **Simple Answer:**  
-  "SHA-256 was designed to be as fast as possible, which makes it cheap for attackers to guess billions of hashes per second using modern graphics cards. Production password storage requires slow, memory-intensive functions."
+  "SHA-256 is designed to be fast. That is useful for data integrity, but it makes password guessing cheaper if hashes leak. Production password storage requires slow, memory-intensive functions."
 - **Technical Follow-up:**  
-  "General-purpose hash functions like SHA-256 and MD5 require minimal memory and simple 32-bit arithmetic operations. When a database dump leaks, attackers can parallelize SHA-256 cracking across consumer GPU arrays and custom ASICs, evaluating tens of billions of guesses per second. Production credential storage demands slow, memory-hard Key Derivation Functions that impose substantial hardware costs per guess."
+  "General-purpose hashes like SHA-256 use minimal memory and simple arithmetic logic, making them vulnerable to parallel acceleration on GPUs and ASICs. Dedicated password-hashing functions such as Argon2id, bcrypt, scrypt, and PBKDF2 deliberately increase the memory and computational cost of each guess. Actual attack speed depends on the algorithm, parameters, and hardware."
 
 ---
 
 ### Question 11: What is a cryptographic salt, and why is it necessary?
 - **Simple Answer:**  
-  "A salt is a unique random string added to each user's password before hashing. It ensures that two users with the same password have completely different hashes, which prevents attackers from using precomputed Rainbow Tables."
+  "A salt is a random value added before password hashing. Different salts make the same password produce different stored results and prevent direct reuse of precomputed lookup tables."
 - **Technical Follow-up:**  
-  "A cryptographic salt is a cryptographically secure pseudo-random byte sequence (typically 128 bits) generated per user and concatenated with the plaintext password prior to key derivation. Salting guarantees digest uniqueness across identical credentials, neutralizing precomputed lookup structures such as Rainbow Tables and forcing adversaries to conduct an independent exhaustive search for each individual account."
+  "A sufficiently large random per-user salt (such as 16 bytes) makes identical passwords overwhelmingly likely to produce different stored verifiers. This prevents an attacker from using a single precomputed rainbow table across multiple accounts, forcing them to attack each account separately."
 
 ---
 
 ### Question 12: Why is Argon2id recommended for production systems?
 - **Simple Answer:**  
-  "Argon2id is the winner of the Password Hashing Competition because it requires large amounts of both memory and processor time. This makes it extremely expensive for attackers to build specialized cracking hardware."
+  "Argon2id is recommended because it is memory-hard. It requires both processor time and computer memory, which makes large-scale offline guessing much more expensive for attackers."
 - **Technical Follow-up:**  
-  "Standardized under IETF RFC 9106, Argon2id combines Argon2d (data-dependent memory access resisting GPU acceleration) and Argon2i (data-independent memory access resisting side-channel timing attacks). Its configurable time cost, memory cost (often 64MB+ per hash), and degree of parallelism ensure that offline attacks cannot be parallelized efficiently on GPU or ASIC architectures."
+  "Argon2id combines data-dependent and data-independent memory access, providing resistance against both GPU-based parallel guessing and side-channel timing attacks. Its configurable memory cost, time iterations, and parallelism allow administrators to tune the verification cost to server capacity."
 
 ---
 
 ### Question 13: What is the biggest limitation of your project?
 - **Simple Answer:**  
-  "Our biggest limitation is experimental circularity: our experiment evaluates how our heuristic responds to password structures, rather than proving independent real-world security against actual hacking tools."
+  "The biggest limitation is that our experiment tests our own scoring rules. It shows that the heuristic reacts consistently to password structures, but it does not measure real-world cracking resistance."
 - **Technical Follow-up:**  
-  "The primary methodological constraint is the coupling between the heuristic model and the evaluation metric. Because the scoring rules and the batch evaluation harness share the same underlying scoring philosophy, the experiment demonstrates internal rule consistency across synthetic categories rather than independent empirical immunity against physical cracking suites or neural-network guessing algorithms."
+  "The primary constraint is heuristic circularity: the batch harness evaluates the same heuristic model implemented in the application. As a result, the experiment verifies internal rule consistency across controlled synthetic categories, rather than measuring empirical resistance against real-world cryptanalysis."
 
 ---
 
 ### Question 14: Is your experiment circular?
 - **Simple Answer:**  
-  "Yes, to some extent it is circular. We openly acknowledge that the experiment measures the consistency of our heuristic rules rather than testing external cracking success."
+  "Yes, the experiment has circularity because the evaluation uses the same heuristic rules that define the score. We explicitly acknowledge this in our paper."
 - **Technical Follow-up:**  
-  "We explicitly document this circularity in our paper's Discussion and Limitations sections. The experiment was intentionally designed as a functional behavioral verification of the heuristic engine across controlled structural groups, rather than an external cryptanalytic benchmark against real-world attack distributions."
+  "We document this in our Discussion and Limitations sections. The experiment was designed to verify the functional behavior and sensitivity of the heuristic across structural groups, not to serve as an external security proof."
 
 ---
 
 ### Question 15: How would you improve PasswordGuard if you had more time?
 - **Simple Answer:**  
-  "If we had more time, we would add a client-side Bloom filter to check the top 100,000 breached passwords, an Argon2 Web Worker simulator to demonstrate memory hardness, and an EFF-based passphrase generator."
+  "If we continue the project, we would compare our heuristic with an independent password-strength model, add a safer common-password check, and improve the password-hashing demonstration."
 - **Technical Follow-up:**  
-  "Future work would incorporate:
-  1. A client-side Bloom filter loaded with 100,000 common breached passwords to evaluate dictionary vulnerability in $O(1)$ memory.
-  2. A WebAssembly-compiled Argon2id benchmarking worker to dynamically illustrate CPU and RAM exhaustion under varying work factors.
-  3. Integration of the Electronic Frontier Foundation (EFF) long wordlist to generate cryptographically random multi-word passphrases."
+  "Future work could explore:
+  1. Comparing heuristic scores against an established model such as zxcvbn.
+  2. Integrating a client-side common-password filter to check known weak passwords efficiently.
+  3. Adding a demonstration of slow key derivation functions to illustrate memory-hardness parameters."
 
 ---
 
-### Question 16: How do you ensure users' passwords are safe when using PasswordGuard?
+### Question 16: How do you protect user passwords in PasswordGuard?
 - **Simple Answer:**  
-  "PasswordGuard executes entirely inside the user's browser memory. We have no backend server, no database, and no network tracking, so passwords are never sent over the internet."
+  "PasswordGuard is designed to process entered passwords locally in the browser. The application does not include a backend endpoint for password submission."
 - **Technical Follow-up:**  
-  "PasswordGuard employs a strict client-side architecture. Password analysis, heuristic scoring, and cryptographic hashing routines execute entirely within the browser's local JavaScript execution context. The application contains no server-side backend, dispatches zero asynchronous network requests containing credential data, and does not persist entered credentials in local browser storage (`localStorage`, IndexedDB, or cookies)."
+  "All evaluation, scoring, and hashing logic executes within the browser's local JavaScript memory context. The application has no server backend, dispatches no password data over the network, and does not intentionally store entered passwords in browser storage (`localStorage` or cookies)."
 
 ---
 
 ### Question 17: What did your experiment actually demonstrate?
 - **Simple Answer:**  
-  "Our experiment demonstrated that our heuristic consistently rewards long passwords and heavily penalizes common predictable patterns, exactly as we designed it to do."
+  "The experiment demonstrated that our heuristic reacts consistently to different password structures: it rewards long passwords and heavily penalizes common patterns."
 - **Technical Follow-up:**  
-  "The experiment proved that the heuristic engine functions deterministically and sensitively across structural boundaries: Category E (Long Random) achieved a top average of 90.0, Category D (Long Passphrase) achieved the highest theoretical entropy (182.9 bits), while Category B (Common Pattern) collapsed to an average of 10.5 due to pattern deductions despite containing uppercase letters and symbols."
+  "The results confirmed the deterministic behavior of the scoring engine across 150 synthetic samples: Category E (Long Random) averaged 90.0, Category D (Long Passphrase) achieved the highest theoretical entropy (182.9 bits), and Category B (Common Pattern) dropped to an average of 10.5 due to pattern penalties despite containing symbols."
 
 ---
 
 ### Question 18: What is the difference between hashing and encryption?
 - **Simple Answer:**  
-  "Hashing is one-way: you cannot reverse it back to plaintext. Encryption is two-way: you scramble data with a secret key, and someone with the key can decrypt it back."
+  "Hashing is one-way: you cannot reverse the hash back to the original text. Encryption is two-way: you scramble data with a key, and anyone with the right key can decrypt it."
 - **Technical Follow-up:**  
-  "Encryption is a reversible cryptographic transformation designed for data confidentiality, requiring a matching cryptographic key to decrypt ciphertext back into plaintext. Hashing is a non-reversible, one-way function designed for data integrity and credential verification. Storing passwords with reversible encryption introduces catastrophic key management risk because compromising the decryption key exposes all credentials simultaneously."
+  "Encryption is a reversible transformation designed for confidentiality, requiring key management to restore plaintext. Hashing is a one-way transformation designed for verification and integrity. Passwords should be hashed rather than encrypted to avoid key compromise risks."
 
 ---
 
-### Question 19: Why does a strong password NOT replace Multi-Factor Authentication (MFA)?
+### Question 19: Why does password strength alone NOT replace Multi-Factor Authentication (MFA)?
 - **Simple Answer:**  
-  "Even the strongest password in the world cannot stop phishing or database leaks. MFA ensures that even if an attacker steals your password, they still cannot access your account without your phone or security key."
+  "Password strength alone does not protect against phishing or a server-side data breach. Multi-Factor Authentication adds an independent factor so a stolen password alone is not enough to log in."
 - **Technical Follow-up:**  
-  "Password complexity only mitigates offline brute-force guessing against stolen hashes. It provides zero protection against credential harvesting through phishing, malware keyloggers, or session hijacking. Multi-Factor Authentication enforces independent credential categories (knowledge, possession, inherence), ensuring that compromising the knowledge factor alone does not permit unauthorized session authorization."
+  "Password complexity only mitigates offline brute-force guessing against stolen verifiers. It does not protect against credential interception, phishing, or malware. Multi-Factor Authentication enforces independent credential categories, ensuring that compromising the knowledge factor alone does not permit unauthorized account access."
 
 ---
 
-### Question 20: Why did Category B score so low (10.5 / 100) despite containing uppercase, digits, and symbols?
+### Question 20: Why did Category B score so low (10.5 / 100) despite containing numbers and symbols?
 - **Simple Answer:**  
-  "Category B contained passwords like `password123` or `admin2024!`. Even though they looked complex to humans, they contained predictable dictionary roots and sequences, which triggered our heuristic's subtractive penalties."
+  "Category B used passwords like `password123` or `admin2024!`. Even though they had numbers and symbols, our heuristic detected predictable words and sequences, which triggered heavy pattern penalties."
 - **Technical Follow-up:**  
-  "Category B represents superficial complexity—capitalizing the initial character and appending sequential numbers or symbols to common dictionary roots. While naive regular-expression meters evaluate these positively, PasswordGuard applies targeted subtractive penalties (-25 for common dictionary roots, -15 for sequential runs), reflecting modern attack tool capabilities and correctly classifying 96.7% of Category B samples as Weak."
+  "Category B represents superficial complexity—dictionary words with appended years or symbols. While naive meters evaluate these positively, PasswordGuard applies targeted subtractive penalties (-25 for dictionary roots, -15 for sequences), correctly classifying 96.7% of Category B samples as Weak."

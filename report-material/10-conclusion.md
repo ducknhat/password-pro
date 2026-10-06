@@ -6,7 +6,7 @@ This project designed, implemented, and evaluated **PasswordGuard**, an educatio
 
 By eliminating complex backend architectures and executing entirely within client-side browser memory, PasswordGuard aims to balance technical clarity, educational value, and privacy-oriented design. The interactive tool exposes the mathematical mechanisms governing password resilience:
 - Character space scaling ($R^L$)
-- Shannon theoretical entropy
+- Theoretical character-space entropy estimate under a uniform-character assumption
 - Illustrative crack times across online vs. offline attacker profiles
 - One-way cryptographic hashing and salting via the browser Web Crypto API
 
