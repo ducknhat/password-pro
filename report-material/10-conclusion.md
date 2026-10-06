@@ -20,7 +20,7 @@ Evaluation on 150 synthetic passwords across five structural categories yielded 
 
 [2] Bonneau, J., Herley, C., van Oorschot, P. C., and Stajano, F. 2012. The quest to replace passwords: A framework for comparative evaluation of web authentication schemes. In *Proceedings of the 2012 IEEE Symposium on Security and Privacy (S&P '12)*. IEEE, 553–567. DOI: https://doi.org/10.1109/SP.2012.44.
 
-[3] Hunt, T. 2018. I've Just Launched Pwned Passwords V2 with Half a Billion Passwords. *Troy Hunt Blog* (Feb. 22, 2018). Retrieved from https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/
+[3] Hunt, T. 2018. I've Just Launched Pwned Passwords V2 with Half a Billion Passwords. *Troy Hunt Blog* (Feb. 22, 2018). Retrieved from https://www.troyhunt.com/ive-just-launched-pwned-passwords-v2/
 
 [4] Kaliski, B. 2000. PKCS #5: Password-Based Cryptography Specification Version 2.0. RFC 2898. Internet Engineering Task Force. DOI: https://doi.org/10.17487/RFC2898.
 

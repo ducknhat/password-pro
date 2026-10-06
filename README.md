@@ -14,7 +14,7 @@
 - **Educational Clarity:** Demystify password complexity rules and explain *why* password length mathematically dominates character alphabet expansion.
 - **Threat Awareness:** Detail the most prevalent real-world authentication attack vectors (weak passwords, password reuse, credential stuffing, phishing, and offline hash cracking).
 - **Cryptographic Transparency:** Demonstrate the difference between reversible encryption and one-way hashing, the role of cryptographic salting in stopping rainbow tables, and why fast hashes like SHA-256 alone are insufficient for real-world password storage.
-- **Privacy by Design:** Designed for 100% client-side password evaluation without application-level password storage or transmission.
+- **Privacy by Design:** Designed for client-side password evaluation without application-level password storage or transmission.
 
 ---
 
@@ -43,7 +43,7 @@
 ---
 
 ## 4. Architecture
-PasswordGuard follows a decoupled, modular, 100% client-side architecture:
+PasswordGuard follows a decoupled, modular, client-side architecture:
 
 ```
 [ User Input (Browser RAM only) ]

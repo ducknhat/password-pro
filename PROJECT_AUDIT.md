@@ -361,7 +361,7 @@ A comprehensive audit and finalization pass was completed to achieve full academ
 A strict, independent verification pass was executed to ensure absolute reference integrity, bibliographic precision, and academic consistency across all materials:
 
 1. **NIST SP 800-63B Correction:**
-   - Identified that NIST SP 800-63B Rev 3 (Grassi et al., 2017) was superseded by **NIST SP 800-63B-4** (Digital Identity Guidelines: Authentication and Authenticator Management), finalized in July 2025 by David Temoshok, James Fenton, Yee-Yin Choong, Naomi Lefkovitz, Ryan Regenscheid, Paul A. Galluzzo, and Justin Richer (DOI: 10.6028/NIST.SP.800-63B-4).
+   - Identified that NIST SP 800-63B Rev 3 (Grassi et al., 2017) was superseded by **NIST SP 800-63B-4** (Digital Identity Guidelines: Authentication and Authenticator Management), finalized in July 2025 by David Temoshok, James L. Fenton, Yee-Yin Choong, Naomi Lefkovitz, Andrew Regenscheid, Ryan Galluzzo, and Justin P. Richer (DOI: 10.6028/NIST.SP.800-63B-4).
    - Re-indexed the reference alphabetically under Temoshok et al. as reference **[13]**, shifting subsequent and preceding index numbers accordingly.
    - Verified that all claims asserting "current NIST guidance" adhere to SP 800-63B-4 mandates (minimum 8 characters, support up to 64+ for passphrases, ban on arbitrary composition rules, mandatory breached credential screening, rate-limiting, and memory-hard KDF verifiers).
 

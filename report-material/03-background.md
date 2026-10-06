@@ -32,7 +32,7 @@ $$\text{Stored Digest} = H(\text{Password} \parallel \text{Salt})$$
 A unique salt forces an attacker to crack each stolen credential individually, neutralizing precomputed multi-target dictionary and rainbow-table attacks [13].
 
 ### 2.5 Fast Hashes vs. Memory-Hard Key Derivation Functions
-General-purpose cryptographic hash functions (such as MD5, SHA-1, and SHA-256) were designed for maximum throughput in digital signatures and file integrity verification [7]. However, this high throughput makes them unsuitable for password storage: massively parallel GPU setups can execute billions of SHA-256 evaluations per second [12]. Current standards—such as NIST SP 800-63B-4 [13]—mandate specialized Key Derivation Functions designed to be deliberately slow and resource-intensive:
+General-purpose cryptographic hash functions (such as MD5, SHA-1, and SHA-256) were designed for maximum throughput in digital signatures and file integrity verification [7]. However, this high throughput makes them unsuitable for password storage: SHA-256 is designed to be fast, which makes large-scale password guessing substantially cheaper than with dedicated password-hashing functions, particularly when adversaries deploy parallelized hardware architectures [12]. Current standards—such as NIST SP 800-63B-4 [13]—mandate specialized Key Derivation Functions designed to be deliberately slow and resource-intensive:
 - **Argon2id:** Winner of the Password Hashing Competition (PHC), optimized to resist GPU and custom ASIC cracking by combining data-dependent and data-independent memory-hard iterations [1].
 - **bcrypt:** Based on the Blowfish cipher with an adaptable cost factor [10].
 - **scrypt:** A memory-hard algorithm designed to thwart hardware parallelism [9].

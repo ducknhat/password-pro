@@ -34,9 +34,9 @@
 
 ### Question 4: What is a salt?
 - **Simple English Answer:**  
-  "A salt is a random string of data added to the password before hashing. Because every user has a different salt, two users with the same password will have completely different hashes. This stops attackers from using precomputed tables to crack thousands of passwords at once."
+  "A salt is a random string of data added to the password before hashing. Because every user has a different salt, two users with the same password will have completely different hashes. This makes precomputed tables impractical across many users."
 - **Technical Answer:**  
-  "A cryptographic salt is a cryptographically random byte sequence (typically 128 bits) appended to the plaintext password prior to key derivation. Salting ensures digest uniqueness across identical credentials, neutralizing precomputed lookup attacks such as Rainbow Tables and forcing attackers to crack each stolen hash individually."
+  "A cryptographic salt is a cryptographically random byte sequence (typically 128 bits) appended to the plaintext password prior to key derivation. Salting ensures digest uniqueness across identical credentials, making precomputed lookup attacks such as Rainbow Tables impractical across many users and forcing attackers to crack each stolen hash individually."
 
 ---
 
@@ -58,9 +58,9 @@
 
 ### Question 7: Why is SHA-256 not ideal for production password storage?
 - **Simple English Answer:**  
-  "SHA-256 is designed to be fast, which makes large-scale password guessing substantially cheaper for attackers. Modern graphics cards can test billions of SHA-256 guesses per second. For password storage, we need slow, memory-hard functions like Argon2id or bcrypt."
+  "SHA-256 is designed to be fast, which makes large-scale password guessing substantially cheaper than with dedicated password-hashing functions. For password storage, we need slow, memory-hard functions like Argon2id or bcrypt."
 - **Technical Answer:**  
-  "SHA-256 is a general-purpose cryptographic hash optimized for maximum throughput and low latency. Because it requires negligible CPU memory and simple arithmetic logic, it can be parallelized massively on consumer GPUs and custom ASICs. Storing passwords requires deliberate computational latency and high memory bandwidth, provided only by memory-hard Key Derivation Functions like Argon2id, bcrypt, or scrypt."
+  "SHA-256 is a general-purpose cryptographic hash optimized for maximum throughput and low latency. Because it requires negligible CPU memory and simple arithmetic logic, it can be parallelized massively on dedicated hardware. Storing passwords requires deliberate computational latency and high memory bandwidth, provided only by memory-hard Key Derivation Functions like Argon2id, bcrypt, or scrypt."
 
 ---
 
@@ -114,17 +114,17 @@
 
 ### Question 14: How does an attacker crack password hashes offline?
 - **Simple English Answer:**  
-  "If hackers steal a database of hashes, they use fast programs like Hashcat on high-end computers. The computer guesses billions of passwords, hashes each guess, and checks if it matches any stolen hash in the database."
+  "If attackers steal a database of fast hashes, they use specialized software like Hashcat on high-performance computers. The computer can test large volumes of candidate passwords very quickly, hashing each guess to see if it matches any stolen hash in the database."
 - **Technical Answer:**  
-  "Offline hash recovery occurs when an attacker obtains an exported database table containing user hashes. Because the attack runs locally without network rate limits or lockout controls, attackers employ tools like Hashcat or John the Ripper to run dictionary words, rule mutations, and brute-force masks across GPU clusters at speeds exceeding billions of hashes per second."
+  "Offline hash recovery occurs when an attacker obtains an exported database table containing user hashes. Because the attack runs locally without network rate limits or lockout controls, attackers employ tools like Hashcat or John the Ripper to run dictionary words, rule mutations, and brute-force masks across parallel hardware at high evaluation rates."
 
 ---
 
 ### Question 15: What is a Rainbow Table?
 - **Simple English Answer:**  
-  "A Rainbow Table is a huge precomputed lookup table of passwords and their corresponding hashes. Hackers can look up a hash in the table and find the plain password instantly without doing any math."
+  "A Rainbow Table is a huge precomputed lookup table of passwords and their corresponding hashes. Hackers can look up a hash in the table and find the plain password without computing hashes on the fly. Using a unique salt makes precomputed rainbow-table lookups impractical across many users."
 - **Technical Answer:**  
-  "A Rainbow Table is a precomputed data structure that exchanges memory storage for time complexity to reverse unsalted cryptographic hash functions. By storing reduction function chains of plaintext-hash pairs, an attacker can search for a stolen hash and recover the original plaintext in constant time. Generating a unique salt for each user completely neutralizes rainbow tables."
+  "A Rainbow Table is a precomputed data structure that exchanges memory storage for time complexity to reverse unsalted cryptographic hash functions. By storing reduction function chains of plaintext-hash pairs, an attacker can search for a stolen hash and recover the original plaintext in constant time. Generating a unique salt for each user makes precomputed rainbow-table lookups impractical across many users."
 
 ---
 

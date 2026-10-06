@@ -30,7 +30,7 @@
   - Users manage dozens of online accounts under cognitive retention limits
   - Complex passwords are hard for human memory to retain
   - People predictably choose simple words, repeated substitutions, and reused passwords
-  - High-performance offline cracking rigs test billions of fast hash guesses per second
+  - High-performance offline cracking rigs can test vast numbers of fast-hash guesses per second
 - **Recommended Visual:**
   - Illustration of a user overwhelmed by passwords, alongside a comparison graphic showing "123456" vs an offline cracking system.
 - **Speaker Notes (Simple English):**
@@ -38,7 +38,7 @@
   > Most users have dozens of online accounts. 
   > Because random character strings are difficult to memorize, users predictably select simple dictionary words like 'password123' or predictable personal dates. 
   > Even worse, users frequently reuse the same password across multiple services. 
-  > Meanwhile, offline adversaries with specialized GPU hardware can test billions of fast hash guesses every second. 
+  > Meanwhile, offline adversaries with specialized hardware can test vast numbers of fast hash guesses every second. 
   > If a single low-security website is breached, attackers use credential stuffing to compromise other accounts. 
   > We built PasswordGuard to help students understand these risks through interactive evaluation."
 
@@ -75,7 +75,7 @@
   - Two-column slide: Threats on the left (warning icons), Defense-in-depth on the right (green shield icons).
 - **Speaker Notes (Simple English):**
   > "Let us look at the primary threats to authentication systems today. 
-  > First, weak passwords: attackers use precomputed wordlists like RockYou to guess predictable words in milliseconds. 
+  > First, weak passwords: attackers use precomputed wordlists like RockYou to guess predictable words very quickly. 
   > Second, credential stuffing: automated botnets replay stolen username and password pairs across popular websites. 
   > Third, phishing: deceptive websites trick users into entering credentials directly, bypassing complexity entirely. 
   > How do we protect authentication? 
@@ -143,7 +143,7 @@
   > Instead, they compute a cryptographic hash. A hash function is a one-way transformation: easy to compute forward, but computationally infeasible to invert. 
   > Our application includes a live demonstration using the browser's native Web Crypto API. 
   > We demonstrate the role of a cryptographic salt: a 16-byte random value added to each password before hashing. 
-  > Because every user receives a unique salt, identical passwords produce completely different digests, neutralizing precomputed rainbow tables. 
+  > Because every user receives a unique salt, identical passwords produce completely different digests, making precomputed rainbow-table lookups impractical across many users. 
   > We also emphasize an important security note: SHA-256 is used here only for demonstration. 
   > Production systems must use slow, memory-hard key derivation functions like Argon2id or bcrypt."
 

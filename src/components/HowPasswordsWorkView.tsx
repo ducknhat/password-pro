@@ -157,7 +157,7 @@ export const HowPasswordsWorkView: React.FC = () => {
               <li>Length: 28 characters</li>
               <li>Easy for humans to visualize and remember</li>
               <li>Immense brute-force search space: ~28 × log₂(27) ≈ 133 bits of theoretical entropy</li>
-              <li>Recommended by NIST SP 800-63B guidelines</li>
+              <li>Recommended by NIST SP 800-63B-4 guidelines</li>
             </ul>
           </div>
         </div>
