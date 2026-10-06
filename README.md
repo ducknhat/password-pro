@@ -71,13 +71,14 @@ PasswordGuard follows a decoupled, modular, 100% client-side architecture:
 - **Icons:** Lucide React
 - **Cryptography:** Native Browser Web Crypto API (`window.crypto.subtle`)
 - **Testing:** Vitest
-- **Data Generation:** Node.js ES Modules (direct import of analyzer module)
+- **Data Generation:** Node.js ES Modules (direct import of TypeScript analyzer via native type stripping, Node 22.6+)
 
 ---
 
 ## 6. Installation
 
-Ensure Node.js (version 18+ or 20+ LTS) is installed on your system.
+Ensure **Node.js (version 22.6+ or Node 24+ LTS)** is installed on your system.
+*(Note: Node.js 22.6.0+ is required to execute the TypeScript-backed experiment runner natively via type-stripping without additional transpiler toolchains).*
 
 ```bash
 # 1. Clone or extract the repository

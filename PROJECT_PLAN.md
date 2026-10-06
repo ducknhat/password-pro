@@ -18,7 +18,10 @@ The software implementation, scoring heuristic, cryptographic demonstration, tes
 - [x] **Single Source of Truth:** Verified `scripts/runExperiment.mjs` directly imports `analyzePassword` from `src/utils/passwordAnalyzer.ts`.
 - [x] **Dynamic Conclusion Derivation:** Replaced stale hard-coded conclusion numbers in experiment runner with programmatic derivations from `categoryStats`.
 - [x] **Score Breakdown Integrity:** Verified that `scoreBreakdown` includes `passphraseBonus` and strictly sums to `rawScore`.
-- [x] **Unit Test Suite Hardening:** Validated all 13 unit tests in Vitest covering all core heuristics, pattern detectors, and exact tier boundaries (0, 39, 40, 69, 70, 100).
+- [x] **Unit Test Suite Hardening:** Validated all 17 unit tests in Vitest covering core heuristics, pattern detectors, exact tier boundaries (0, 39, 40, 69, 70, 100), numeric stability on 500/1000 char inputs, and safe duration formatting.
+- [x] **Numeric Overflow & Stability:** Replaced naive `Math.pow()` with log-space derivations ($\log_{10} R^L$) for search space and crack times, eliminating `Infinity` and `NaN` risks on long passwords.
+- [x] **Node Runtime Compatibility:** Set `"engines": { "node": ">=22.6.0" }` and updated `package.json` and `README.md` to reflect native TypeScript type-stripping support.
+- [x] **Presentation Outline Synchronized:** Aligned all 10 slides and speaker notes in `presentation-outline.md` with defensive academic framing (entropy as theoretical character-space estimate, no real-world cracking overclaims).
 - [x] **Academic Claims Refinement:** Eliminated overclaims ("proves", "validated", "secure") across UI, documentation, and report materials.
 - [x] **Entropy Terminology Correction:** Standardized terminology to "theoretical character-space entropy estimate under a uniform-character assumption".
 - [x] **Crack-Time Terminology Correction:** Clarified that attack models use "illustrative assumed guessing rates" rather than fixed hardware benchmarks.
@@ -64,7 +67,7 @@ The software implementation, scoring heuristic, cryptographic demonstration, tes
 | **Application UI** | **FROZEN** | Clean, responsive, dark theme, zero storage |
 | **Scoring Heuristic** | **FROZEN** | Single source of truth in `passwordAnalyzer.ts` |
 | **Web Crypto Sandbox** | **FROZEN** | SHA-256 + 16B salt, educational framing |
-| **Unit Tests** | **PASSING** | 13/13 passing in Vitest |
+| **Unit Tests** | **PASSING** | 17/17 passing in Vitest (including numeric stability) |
 | **Experiment Data** | **FROZEN** | 150 synthetic samples, all files match |
 | **Linter / Build** | **PASSING** | 0 errors, 0 warnings; TS build OK |
 | **Report Drafts** | **REVIEWED** | 10 markdown chapters ready for compilation |

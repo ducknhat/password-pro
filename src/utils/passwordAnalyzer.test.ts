@@ -111,12 +111,92 @@ describe('PasswordGuard Analyzer Unit Tests', () => {
     expect(res.scoreBreakdown.rawScore).toBe(expectedRaw);
   });
 
-  it('formats crack durations realistically', () => {
+  it('formats crack durations realistically and safely handles extreme values', () => {
     expect(formatCrackDuration(0.0001)).toContain('Instant');
     expect(formatCrackDuration(45)).toBe('45 seconds');
     expect(formatCrackDuration(120)).toBe('2.0 minutes');
     expect(formatCrackDuration(7200)).toBe('2.0 hours');
     expect(formatCrackDuration(86400 * 5)).toBe('5.0 days');
     expect(formatCrackDuration(31536000 * 50)).toBe('50 years');
+    expect(formatCrackDuration(Infinity)).not.toContain('Infinity');
+    expect(formatCrackDuration(1e305)).not.toContain('Infinity');
+    expect(formatCrackDuration(NaN)).toBe('Unknown duration');
+  });
+
+  describe('Numeric Stability & Extreme Password Length Tests', () => {
+    it('handles normal strong password without numeric degradation', () => {
+      const res = analyzePassword('7$zW#9!kLp&2Qx@m');
+      expect(res.score).toBeGreaterThanOrEqual(70);
+      expect(res.tier).toBe('Strong');
+      expect(Number.isFinite(res.estimatedEntropyBits)).toBe(true);
+      expect(Number.isFinite(res.searchSpaceBigIntApprox)).toBe(true);
+      expect(res.searchSpaceCombinations).not.toContain('Infinity');
+      expect(res.searchSpaceCombinations).not.toContain('NaN');
+      res.crackEstimates.forEach(est => {
+        expect(Number.isFinite(est.seconds)).toBe(true);
+        expect(est.displayTime).not.toContain('Infinity');
+        expect(est.displayTime).not.toContain('NaN');
+      });
+    });
+
+    it('evaluates long passphrase with stable search space', () => {
+      const res = analyzePassword('correct-horse-battery-staple');
+      expect(res.passwordLength).toBe(28);
+      expect(res.score).toBeGreaterThanOrEqual(70);
+      expect(res.tier).toBe('Strong');
+      expect(res.searchSpaceCombinations).not.toContain('Infinity');
+      expect(res.searchSpaceCombinations).not.toContain('NaN');
+      expect(Number.isFinite(res.searchSpaceBigIntApprox)).toBe(true);
+      res.crackEstimates.forEach(est => {
+        expect(Number.isFinite(est.seconds)).toBe(true);
+        expect(est.displayTime).not.toContain('Infinity');
+        expect(est.displayTime).not.toContain('NaN');
+      });
+    });
+
+    it('gracefully handles extremely long password (500 chars) without Infinity or NaN', () => {
+      // 500 characters using all 4 pools: would normally exceed 1e308 in Math.pow(95, 500)
+      const longPwd = 'aA1!'.repeat(125);
+      expect(longPwd.length).toBe(500);
+
+      const res = analyzePassword(longPwd);
+      expect(res.passwordLength).toBe(500);
+      expect(res.score).toBeGreaterThanOrEqual(70);
+      expect(res.tier).toBe('Strong');
+
+      // Search space should be formatted in log-space scientific notation, NOT Infinity
+      expect(res.searchSpaceCombinations).not.toContain('Infinity');
+      expect(res.searchSpaceCombinations).not.toContain('NaN');
+      expect(res.searchSpaceCombinations).toMatch(/^\d+\.\d{2}e\+\d+$/);
+
+      // Log-space magnitude should be a finite positive number
+      expect(Number.isFinite(res.searchSpaceBigIntApprox)).toBe(true);
+      expect(res.searchSpaceBigIntApprox).toBeGreaterThan(900); // 500 * log10(95) ≈ 988.8
+
+      // Entropy should be finite
+      expect(Number.isFinite(res.estimatedEntropyBits)).toBe(true);
+      expect(res.estimatedEntropyBits).toBeGreaterThan(3000);
+
+      // Crack time estimates must not expose Infinity or NaN
+      res.crackEstimates.forEach(est => {
+        expect(Number.isFinite(est.seconds)).toBe(true);
+        expect(est.displayTime).not.toContain('Infinity');
+        expect(est.displayTime).not.toContain('NaN');
+        expect(est.displayTime).toContain('years (Centuries+)');
+      });
+    });
+
+    it('gracefully handles 1000-character input without crashing or throwing', () => {
+      const megaPwd = 'Super-Passphrase-Word-Collection-'.repeat(30) + '2026!';
+      expect(() => analyzePassword(megaPwd)).not.toThrow();
+
+      const res = analyzePassword(megaPwd);
+      expect(res.searchSpaceCombinations).not.toContain('Infinity');
+      expect(res.searchSpaceCombinations).not.toContain('NaN');
+      res.crackEstimates.forEach(est => {
+        expect(est.displayTime).not.toContain('Infinity');
+        expect(est.displayTime).not.toContain('NaN');
+      });
+    });
   });
 });

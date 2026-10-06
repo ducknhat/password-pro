@@ -9,7 +9,10 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
-    "experiment": "node scripts/runExperiment.mjs"
+    "experiment": "node --experimental-strip-types scripts/runExperiment.mjs"
+  },
+  "engines": {
+    "node": ">=22.6.0"
   },
   "dependencies": {
     "lucide-react": "^1.49.0",

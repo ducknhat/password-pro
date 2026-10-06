@@ -229,6 +229,69 @@ The report materials contain structured citation placeholders to avoid unverifie
 
 ---
 
-## 10. Final Project Status
+## 10. Final Correction Pass
+
+During the final verification pass (2026-10-06), the remaining edge cases and documentation consistency requirements were completed:
+
+1. **Node.js Runtime Compatibility:**
+   - Evaluated execution mechanism for direct TypeScript imports (`import ... from '../src/utils/passwordAnalyzer.ts'`).
+   - Node.js 22.6.0+ introduced experimental native type-stripping via `--experimental-strip-types`, and Node 24 natively executes TypeScript imports.
+   - Configured `"engines": { "node": ">=22.6.0" }` and script `"experiment": "node --experimental-strip-types scripts/runExperiment.mjs"` in `package.json`.
+   - Updated `README.md` to explicitly declare Node.js 22.6+ / Node 24+ LTS requirements, eliminating unsupported Node 18/20 claims. Zero extraneous transpiler tools were added.
+
+2. **Search-Space Numeric Overflow Fix:**
+   - In `src/utils/passwordAnalyzer.ts`, replaced naive `Math.pow(poolSize, length)` with numerically stable log-space calculations:
+     $$\log_{10}(\text{Combinations}) = L \times \log_{10}(R)$$
+   - When $\log_{10}(\text{Combinations}) < 300$, exact JavaScript floating-point representation is preserved identically.
+   - When $\log_{10}(\text{Combinations}) \ge 300$, scientific notation ($m \times 10^e$) is derived directly from mantissa and exponent components, preventing `Infinity` or `NaN`.
+   - In `formatCrackDuration()`, added safeguards against `Infinity`, `NaN`, and extreme magnitudes ($\ge 10^{300}$), returning bounded astronomical estimates (`> 1.00e+300 years (Astronomical/Centuries+)`).
+   - Derived crack times in log-space for astronomical numbers, preventing arithmetic overflow while preserving exact duration formats for normal passwords.
+
+3. **New Numeric-Stability Unit Tests:**
+   - Added 4 new test suites in `src/utils/passwordAnalyzer.test.ts` covering:
+     - Normal strong password (`7$zW#9!kLp&2Qx@m`): finite entropy, finite search space, valid crack times.
+     - Long passphrase (`correct-horse-battery-staple`): stable combinations and estimates.
+     - Extremely long password (500 characters): verified that search space is formatted as log-space scientific notation (`/^\d+\.\d{2}e\+\d+$/`), log magnitude is finite (> 900), and crack estimates contain no `Infinity` or `NaN`.
+     - Mega input (1000 characters): verified analyzer does not throw or crash and formats stable output.
+     - Extreme duration formatting: tested `formatCrackDuration(Infinity)`, `formatCrackDuration(1e305)`, and `formatCrackDuration(NaN)`.
+   - Confirmed tier boundaries (0–39 Weak, 40–69 Medium, 70–100 Strong) remain strictly enforced.
+
+4. **Presentation Outline Wording Synchronization:**
+   - Fully synchronized all 10 slides and speaker notes in `presentation-outline.md` with the academic paper's defensive phrasing:
+     - **Slide 6 (Entropy):** Clarified in notes that $E = L \times \log_2 R$ estimates theoretical character-space size under uniform assumption, not human cognitive randomness.
+     - **Slide 8 (Experiment):** Explicitly framed as a controlled functional evaluation of heuristic consistency, not a real-world security proof.
+     - **Slide 9 (Results):** Removed "cracked instantly", clearly presented exact category metrics (E: 90.0/100, D: 182.9 bits, C: 80.8/100, B: 10.5/100, A: 2.0/100), and noted these reflect heuristic behavior.
+     - **Slide 10 (Conclusion):** Replaced "Length is the single most effective defense" with exponential growth in theoretical search space, and differentiated password security from complete authentication defense-in-depth (MFA, slow hashes, salts, rate limiting).
+
+5. **Report Material Wording Review:**
+   - Confirmed clean separation of Results (numerical tables/charts in `07-results.md`) and Discussion (thematic interpretation in `08-discussion.md`).
+   - Replaced overclaims across `08-discussion.md`, `09-limitations.md`, and `10-conclusion.md` with scientifically defensible phrasing.
+
+6. **Experiment Verification Result:**
+   - Executed `npm run experiment` (`node --experimental-strip-types scripts/runExperiment.mjs`).
+   - Verified that `data/results.json`, `data/results.csv`, and `src/data/experimentalResults.json` regenerated successfully.
+   - Main results verified identical: $N=150$ total (Weak=59, Medium=12, Strong=79); Cat A=2.0 (100% Weak); Cat B=10.5 (96.7% Weak); Cat C=80.8 (93.3% Strong); Cat D=75.8 (70.0% Strong, 182.9 bits); Cat E=90.0 (100% Strong).
+
+7. **Linter Result:**
+   - `npm run lint` (`oxlint`): **0 errors, 0 warnings** across 13 files.
+
+8. **Unit-Test Result:**
+   - `npm test` (`vitest run`): **17 / 17 tests passed** (100%).
+
+9. **Build Result:**
+   - `npm run build` (`tsc -b && vite build`): **Succeeded in 535ms** with zero TypeScript errors.
+
+10. **Remaining Citation TODOs:**
+    - Exactly **16 citation placeholders** cataloged across `report-material/` and listed in Section 9. No citations have been fabricated.
+
+11. **Remaining Known Limitations:**
+    - The evaluation heuristic does not replace commercial penetration testing.
+    - Uniform-distribution entropy serves as an upper bound baseline; real human password entropy is lower due to cognitive bias.
+    - Brute-force crack models represent illustrative assumed rates, not hardware benchmarks.
+    - Web Crypto SHA-256 is an educational demonstration only.
+
+---
+
+## 11. Final Project Status
 
 Feature Freeze: The PasswordGuard application contains sufficient functionality for the course assignment. Further work should prioritize academic reporting and presentation preparation rather than feature expansion.

@@ -75,6 +75,10 @@ const SEQUENCES = [
  * Format raw seconds into clear human-readable academic notation
  */
 export function formatCrackDuration(seconds: number): string {
+  if (Number.isNaN(seconds)) return 'Unknown duration';
+  if (!Number.isFinite(seconds) || seconds >= 1e300) {
+    return '> 1.00e+300 years (Astronomical/Centuries+)';
+  }
   if (seconds <= 0.001) return '< 1 millisecond (Instant)';
   if (seconds < 1) return '< 1 second (Instant)';
   if (seconds < 60) return `${Math.round(seconds)} seconds`;
@@ -244,12 +248,25 @@ export function analyzePassword(pwd: string): PasswordAnalysisResult {
   const estimatedEntropyBits = poolSize > 0 ? Math.round(length * Math.log2(poolSize) * 10) / 10 : 0;
 
   // Search Space Combinations
-  const approxCombinations = Math.pow(poolSize, length);
+  // Calculate in log10 space for numerical stability across arbitrarily long passwords
+  const log10Combinations = poolSize > 0 && length > 0 ? length * Math.log10(poolSize) : 0;
   let combinationsString = '';
-  if (approxCombinations < 1e6) {
+
+  if (log10Combinations < 6) {
+    const approxCombinations = Math.pow(poolSize, length);
     combinationsString = Math.round(approxCombinations).toLocaleString();
-  } else {
+  } else if (log10Combinations < 300) {
+    const approxCombinations = Math.pow(poolSize, length);
     combinationsString = approxCombinations.toExponential(2);
+  } else {
+    // Exact mantissa/exponent representation derived in log-space to prevent Infinity
+    let exponent = Math.floor(log10Combinations);
+    let mantissa = Math.pow(10, log10Combinations - exponent);
+    if (mantissa >= 9.995) {
+      mantissa /= 10;
+      exponent += 1;
+    }
+    combinationsString = `${mantissa.toFixed(2)}e+${exponent}`;
   }
 
   // Checks checklist
@@ -328,8 +345,6 @@ export function analyzePassword(pwd: string): PasswordAnalysisResult {
 
   // Illustrative Crack Time Estimates under 3 Assumed Rates
   // Note: These are illustrative educational calculations based on exhaustive uniform search space / 2 (average search)
-  const avgCombinations = approxCombinations / 2;
-
   const scenarios = [
     {
       scenario: 'Online Throttled Guessing',
@@ -352,13 +367,38 @@ export function analyzePassword(pwd: string): PasswordAnalysisResult {
   ];
 
   const crackEstimates: CrackTimeEstimate[] = scenarios.map(sc => {
-    const rawSec = avgCombinations / sc.ratePerSecond;
+    let rawSec: number;
+    let displayTime: string;
+
+    if (log10Combinations < 300) {
+      const avgCombinations = Math.pow(poolSize, length) / 2;
+      rawSec = avgCombinations / sc.ratePerSecond;
+      displayTime = formatCrackDuration(rawSec);
+    } else {
+      // Safe log-space derivation for astronomical values exceeding standard Number limits:
+      // avgCombinations = (R^L) / 2 -> log10(avgCombinations) = log10Combinations - log10(2)
+      // seconds = avgCombinations / rate -> log10(seconds) = log10(avgCombinations) - log10(rate)
+      const log10AvgCombinations = log10Combinations - Math.log10(2);
+      const log10Sec = log10AvgCombinations - Math.log10(sc.ratePerSecond);
+      const log10Years = log10Sec - Math.log10(31536000); // 31,536,000 seconds/year
+
+      rawSec = log10Sec < 308 ? Math.pow(10, log10Sec) : Number.MAX_VALUE;
+
+      let exp = Math.floor(log10Years);
+      let mant = Math.pow(10, log10Years - exp);
+      if (mant >= 9.995) {
+        mant /= 10;
+        exp += 1;
+      }
+      displayTime = `${mant.toFixed(2)}e+${exp} years (Centuries+)`;
+    }
+
     return {
       scenario: sc.scenario,
       ratePerSecond: sc.ratePerSecond,
       rateLabel: sc.rateLabel,
       seconds: rawSec,
-      displayTime: formatCrackDuration(rawSec),
+      displayTime,
       assumption: sc.assumption
     };
   });
@@ -380,7 +420,7 @@ export function analyzePassword(pwd: string): PasswordAnalysisResult {
     tierColor,
     estimatedEntropyBits,
     searchSpaceCombinations: combinationsString,
-    searchSpaceBigIntApprox: Math.log10(approxCombinations || 1),
+    searchSpaceBigIntApprox: log10Combinations,
     checks,
     warnings,
     recommendations,
