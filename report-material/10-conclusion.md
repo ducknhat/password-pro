@@ -2,15 +2,15 @@
 
 ## IX. Conclusion
 
-This project designed, implemented, and empirically evaluated **PasswordGuard**, an educational web application for Information Technology students exploring the foundational principles of password security and authentication defense.
+This project designed, implemented, and evaluated **PasswordGuard**, an educational web application for Information Technology students exploring the foundational principles of password security and authentication defense.
 
-By eliminating complex backend architectures and executing entirely within client-side browser memory, PasswordGuard achieves an optimal balance between technical rigor, educational clarity, and strict privacy by design. The interactive tool exposes the mathematical mechanisms governing password resilience:
+By eliminating complex backend architectures and executing entirely within client-side browser memory, PasswordGuard aims to balance technical clarity, educational value, and privacy-oriented design. The interactive tool exposes the mathematical mechanisms governing password resilience:
 - Character space scaling ($R^L$)
 - Shannon theoretical entropy
 - Illustrative crack times across online vs. offline attacker profiles
 - One-way cryptographic hashing and salting via the browser Web Crypto API
 
-Empirical evaluation on 150 synthetic passwords across five structural categories yielded findings consistent with the educational thesis: **length mathematically scales combinatorial search complexity**. Multi-word passphrases (averaging 31.1 characters) produced an average theoretical character-space entropy estimate of 182.9 bits under the uniform-character assumption with 21 of 30 samples (70.0%) classified as Strong, whereas superficially complex short passwords containing numbers and symbols scored an average of only 10.5 / 100 due to predictable pattern penalties. Finally, the project emphasized that passwords must not exist in isolation, highlighting modern defense-in-depth strategies including slow Key Derivation Functions (Argon2id), unique cryptographic salts, rate limiting, and Multi-Factor Authentication (MFA) [13].
+Evaluation on 150 synthetic passwords across five structural categories yielded findings demonstrating how the implemented heuristic behaves: **length mathematically scales combinatorial search complexity**. Multi-word passphrases (averaging 31.1 characters) produced an average theoretical character-space entropy estimate of 182.9 bits under the uniform-character assumption with 21 of 30 samples (70.0%) classified as Strong, whereas superficially complex short passwords containing numbers and symbols scored an average of only 10.5 / 100 due to predictable pattern penalties. Finally, the project emphasized that passwords must not exist in isolation, highlighting modern defense-in-depth strategies including slow Key Derivation Functions (Argon2id), unique cryptographic salts, rate limiting, and Multi-Factor Authentication (MFA) [13].
 
 ---
 
