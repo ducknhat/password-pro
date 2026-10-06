@@ -7,14 +7,8 @@ import { runHashAndSaltDemo, generateRandomSalt, type HashDemoResult } from '../
 
 export const HashingSaltingView: React.FC = () => {
   const [inputPassword, setInputPassword] = useState('ExamplePassword123!');
-  const [salt, setSalt] = useState('');
+  const [salt, setSalt] = useState(() => generateRandomSalt(16));
   const [demoResult, setDemoResult] = useState<HashDemoResult | null>(null);
-
-  // Initialize with random salt
-  useEffect(() => {
-    const initialSalt = generateRandomSalt(16);
-    setSalt(initialSalt);
-  }, []);
 
   // Compute live hash on password or salt change
   useEffect(() => {
@@ -37,11 +31,10 @@ export const HashingSaltingView: React.FC = () => {
         <AlertTriangle size={22} style={{ flexShrink: 0, marginTop: '2px', color: '#f87171' }} />
         <div>
           <div style={{ fontWeight: 800, fontSize: '0.95rem', marginBottom: '0.2rem', color: '#fecaca' }}>
-            CRITICAL ACADEMIC & SECURITY NOTICE: SHA-256 Alone is NOT for Production Passwords
+            CRITICAL ACADEMIC & SECURITY NOTICE: SHA-256 is for Educational Demonstration Only
           </div>
           <div style={{ fontSize: '0.85rem', color: '#fca5a5' }}>
-            General-purpose cryptographic hashes like SHA-256 or MD5 were engineered for data integrity and speed. A modern GPU cluster can compute over <strong>100 billion SHA-256 hashes per second</strong>. 
-            Real-world systems must exclusively use slow, memory-hard Key Derivation Functions (KDFs) such as <strong>Argon2id</strong>, <strong>bcrypt</strong>, or <strong>scrypt</strong>.
+            SHA-256 is demonstrated here solely to illustrate one-way hashing and salting concepts. Computing <code>SHA-256(password + salt)</code> does <strong>not</strong> constitute a production password-storage architecture. General-purpose hashes are fast, allowing high-performance cracking rigs to test billions of guesses per second. Production authentication systems must exclusively employ dedicated, slow, memory-hard Key Derivation Functions (KDFs) such as <strong>Argon2id</strong>, <strong>bcrypt</strong>, or <strong>scrypt</strong>.
           </div>
         </div>
       </div>
@@ -53,7 +46,7 @@ export const HashingSaltingView: React.FC = () => {
           Interactive One-Way Hashing & Salting Demonstration
         </h2>
         <p className="card-desc">
-          Using the browser's native Web Crypto API (<code style={{ fontFamily: 'var(--font-mono)' }}>crypto.subtle.digest('SHA-256')</code>) to demonstrate one-way functions and the Avalanche Effect.
+          Using the browser's native Web Crypto API (<code style={{ fontFamily: 'var(--font-mono)' }}>crypto.subtle.digest('SHA-256')</code>) to demonstrate one-way functions, digest uniqueness, and the role of cryptographic salting.
         </p>
 
         {/* Input Controls */}
@@ -129,7 +122,7 @@ export const HashingSaltingView: React.FC = () => {
                 Salted SHA-256 Digest (Unique)
               </div>
               <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-                <code style={{ color: '#cbd5e1' }}>SHA-256(password + salt)</code> — Every user gets a unique salt. The resulting hash is completely different (Avalanche effect), invalidating rainbow tables.
+                <code style={{ color: '#cbd5e1' }}>SHA-256(password + salt)</code> — Every user receives a unique cryptographic salt. Salting ensures unique hash outputs even for identical passwords, invalidating precomputed Rainbow Table lookups.
               </p>
               <div className="mono-snippet" style={{ color: '#34d399', fontSize: '0.78rem' }}>
                 {demoResult.saltedHash}

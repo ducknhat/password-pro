@@ -53,30 +53,30 @@ export const AboutView: React.FC = () => {
           </div>
 
           <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '0.9rem', borderRadius: '8px', borderLeft: '3px solid #00f2fe' }}>
-            <strong style={{ color: '#93c5fd' }}>2. Theoretical Entropy Assumption:</strong>
+            <strong style={{ color: '#93c5fd' }}>2. Theoretical Character-Space Entropy Assumption:</strong>
             <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-              Entropy calculations assume a uniform independent character distribution. Human passwords suffer from cognitive patterns and semantic associations that reduce true entropy significantly below theoretical estimates.
+              Entropy calculations represent theoretical character-space estimates under an assumption of uniform, independent character selection. Real human passwords suffer from cognitive patterns that make actual resistance lower than this theoretical upper bound.
             </div>
           </div>
 
           <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '0.9rem', borderRadius: '8px', borderLeft: '3px solid #ef4444' }}>
             <strong style={{ color: '#fca5a5' }}>3. Illustrative Brute-Force Models:</strong>
             <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-              The brute-force crack times assume uniform exhaustive searches. In real-world breaches, attackers almost never perform pure exhaustive search first; they use targeted wordlists, rule-based transforms, and leaked password dumps.
+              The brute-force guessing times assume idealized uniform exhaustive searches (R^L / 2). In real breaches, attackers rarely begin with pure brute force; they prioritize targeted wordlists, rule-based transforms, and leaked password dumps.
             </div>
           </div>
 
           <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '0.9rem', borderRadius: '8px', borderLeft: '3px solid #a855f7' }}>
-            <strong style={{ color: '#d8b4fe' }}>4. SHA-256 is for Demonstration Only:</strong>
+            <strong style={{ color: '#d8b4fe' }}>4. SHA-256 is for Educational Demonstration Only:</strong>
             <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-              The hashing section utilizes browser Web Crypto SHA-256 strictly to visually demonstrate one-way functions and salting. SHA-256 is NOT recommended for production password storage, which requires memory-hard functions like Argon2id.
+              The hashing section utilizes browser Web Crypto SHA-256 strictly to visually demonstrate one-way transforms and salting. SHA-256 is NOT recommended for production password storage, which requires dedicated memory-hard functions like Argon2id, bcrypt, or scrypt.
             </div>
           </div>
 
           <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '0.9rem', borderRadius: '8px', borderLeft: '3px solid #10b981' }}>
-            <strong style={{ color: '#a7f3d0' }}>5. Synthetic Dataset Boundary:</strong>
+            <strong style={{ color: '#a7f3d0' }}>5. Synthetic Dataset & Heuristic Evaluation Boundary:</strong>
             <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-              The 150 experimental passwords were synthetically modeled to protect ethics and privacy. They reflect representative categories rather than a live empirical sample of compromised accounts.
+              The 150 experimental passwords were synthetically modeled to adhere to ethical standards. The experiment evaluates the internal consistency of the PasswordGuard heuristic across controlled structural categories rather than acting as a universal cracking benchmark.
             </div>
           </div>
         </div>

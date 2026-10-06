@@ -5,7 +5,7 @@
 The experimental run processed all 150 synthetic samples without error. The aggregated numerical findings are documented in Table 1 below.
 
 ### Table 1: Aggregated Results by Password Category
-| Category Key | Category Description | Sample Size ($n$) | Mean Length | Mean Diversity | Mean Score (0–100) | Mean Entropy (bits) | Weak (%) | Medium (%) | Strong (%) |
+| Category Key | Category Description | Sample Size ($n$) | Mean Length | Mean Diversity | Mean Score (0–100) | Mean Theoretical Entropy (bits) | Weak (%) | Medium (%) | Strong (%) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **A** | Short Simple | 30 | 4.2 | 1.5 | 2.0 | 20.8 | 100.0% | 0.0% | 0.0% |
 | **B** | Common Pattern | 30 | 9.6 | 2.2 | 10.5 | 51.2 | 96.7% | 3.3% | 0.0% |
@@ -36,12 +36,12 @@ Category D comprised multi-word phrases averaging 31.1 characters in length with
 #### 5. Category E (Long Random)
 Category E passwords represented ideal machine-generated secrets: 16 characters in length, utilizing all 4 character pools ($R = 95$) without predictable sequences or repetitions. This group achieved the highest average score (90.0 / 100) and an average entropy of 105.1 bits, with 100% of samples classified in the Strong tier.
 
-### 7.3 Correlation Between Length and Strength Score
-Evaluating score across discrete length thresholds showed a steep logistic growth curve:
-- Length 3–5: Average score 1.8 / 100
-- Length 8–10: Average score 10.5 / 100
-- Length 12–15: Average score 80.8 / 100
-- Length 16: Average score 90.0 / 100
-- Length > 25 (passphrases): Average score 75.8 / 100
+### 7.3 Observed Score Distribution Across Length Groups
+Evaluating mean heuristic score across discrete length groups within the synthetic sample set showed:
+- Length 3–5: Average score 1.8 / 100 (sample count = 30)
+- Length 8–10: Average score 11.2 / 100 (sample count = 24)
+- Length 11–15: Average score 71.9 / 100 (sample count = 36)
+- Length 16: Average score 90.0 / 100 (sample count = 30)
+- Length ≥ 27 (passphrases): Average score 75.8 / 100 (sample count = 30)
 
-This validates the hypothesis that length is the most significant structural determinant of resistance against brute-force search.
+The observed results are consistent with the scoring rules implemented in PasswordGuard, with longer passwords and pattern-free structures receiving higher tier classifications across the synthetic categories.

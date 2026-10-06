@@ -48,10 +48,10 @@ export const ExperimentView: React.FC = () => {
           <div>
             <h2 className="card-title">
               <FlaskConical size={20} color="#00f2fe" />
-              Experimental Evaluation & Synthetic Benchmark
+              Experimental Heuristic Evaluation on Synthetic Passwords
             </h2>
             <p className="card-desc">
-              Rigorous, reproducible evaluation of {experimentData.metadata.totalTested} synthetic test passwords categorized across 5 structural paradigms.
+              Controlled functional evaluation assessing whether the PasswordGuard heuristic behaves consistently with its design across {experimentData.metadata.totalTested} synthetic test passwords (30 per category across 5 structural categories).
             </p>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -79,15 +79,15 @@ export const ExperimentView: React.FC = () => {
         {/* Quick Highlights Summary Cards */}
         <div className="grid-3" style={{ marginTop: '0.5rem' }}>
           <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Total Tested Samples</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Synthetic Test Samples</div>
             <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#ffffff', fontFamily: 'var(--font-mono)' }}>
               {experimentData.metadata.totalTested}
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>30 per category across 5 categories</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>30 intentionally constructed per category</div>
           </div>
 
           <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Top Average Strength</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Top Heuristic Average</div>
             <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#10b981', fontFamily: 'var(--font-mono)' }}>
               90.0 / 100
             </div>
@@ -95,11 +95,11 @@ export const ExperimentView: React.FC = () => {
           </div>
 
           <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Max Average Entropy</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Max Theoretical Entropy Estimate</div>
             <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#00f2fe', fontFamily: 'var(--font-mono)' }}>
               182.9 bits
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Category D (Long Passphrases, 31.1 avg length)</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Category D (Long Passphrases, uniform assumption)</div>
           </div>
         </div>
       </div>
@@ -190,9 +190,9 @@ export const ExperimentView: React.FC = () => {
         <div className="card">
           <h3 className="card-title" style={{ fontSize: '1.05rem' }}>
             <CheckCircle2 size={18} color="#10b981" />
-            Empirical Findings & Conclusions
+            Heuristic Consistency Observations
           </h3>
-          <p className="card-desc">Generated directly from the 150 executed synthetic tests.</p>
+          <p className="card-desc">Dynamically generated from the 150 executed synthetic test evaluations.</p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
             {experimentData.conclusions.map((conc, i) => (
@@ -211,7 +211,7 @@ export const ExperimentView: React.FC = () => {
           <Table size={18} color="#00f2fe" />
           Aggregated Results Table by Category
         </h3>
-        <p className="card-desc">Metrics generated from <code style={{ fontFamily: 'var(--font-mono)' }}>data/results.json</code> and <code style={{ fontFamily: 'var(--font-mono)' }}>data/results.csv</code>.</p>
+        <p className="card-desc">Metrics generated dynamically from <code style={{ fontFamily: 'var(--font-mono)' }}>data/results.json</code> and <code style={{ fontFamily: 'var(--font-mono)' }}>data/results.csv</code>.</p>
 
         <div style={{ overflowX: 'auto' }}>
           <table className="data-table">
@@ -247,6 +247,9 @@ export const ExperimentView: React.FC = () => {
             </tbody>
           </table>
         </div>
+        <p className="heuristic-note" style={{ marginTop: '0.75rem' }}>
+          * Methodology Note: The experiment provides a controlled functional evaluation of the educational heuristic across intentionally constructed synthetic samples. Results reflect scoring rule consistency and should not be interpreted as an independent real-world cracking benchmark.
+        </p>
       </div>
     </div>
   );

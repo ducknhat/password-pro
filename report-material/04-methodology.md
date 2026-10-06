@@ -3,7 +3,7 @@
 ## III. Materials and Methods
 
 ### 4.1 Ethical and Privacy Framework
-Conducting security research on user credentials carries significant privacy and ethical liabilities [CITATION REQUIRED]. To ensure compliance with academic research standards and user privacy:
+Conducting security research on user credentials carries significant privacy and ethical liabilities [TODO: Citation needed - Research ethics frameworks, e.g., The Menlo Report, 2012]. To ensure compliance with academic research standards and user privacy:
 1. **Zero External Communication:** The analysis engine is executed exclusively within the user's local web browser execution context via TypeScript.
 2. **Zero In-Browser Storage:** No persistent state mechanisms (such as `localStorage`, `sessionStorage`, cookies, or `IndexedDB`) are utilized.
 3. **Purely Synthetic Evaluation Data:** Experimental evaluations are conducted strictly on synthetically generated test strings. No breached passwords, leaked database collections, or live student credentials were collected or stored.
@@ -43,16 +43,16 @@ $$S = \text{clamp}_{[0, 100]}\left( S_{\text{length}} + S_{\text{variety}} + B_{
 - Single character pool only: $-15$ points
 
 #### Score Tiers
-- **0–39:** Weak (readily breakable by automated or dictionary attacks)
-- **40–69:** Medium (moderate defense against offline attacks, lacking complete structural safeguards)
-- **70–100:** Strong (high resistance against exhaustive and automated cracking)
+- **0–39:** Weak (readily breakable by automated or dictionary attacks according to heuristic)
+- **40–69:** Medium (moderate defense according to heuristic, lacking complete structural safeguards)
+- **70–100:** Strong (high resistance against exhaustive search according to heuristic)
 
 ### 4.3 Brute-Force Time Estimation Model
-Search space calculations assume an exhaustive brute-force attack testing on average half of the combinatorial domain:
+Search space calculations assume an idealized exhaustive search testing on average half of the combinatorial domain:
 $$T = \frac{R^L / 2}{V_{\text{guess}}}$$
-Where $V_{\text{guess}}$ represents the assumed testing velocity across three distinct threat profiles:
-1. **Online Throttled Attack:** $V_1 = 100$ guesses/sec (reflecting rate-limiting, CAPTCHA, or lockout mechanisms).
-2. **Offline Fast Desktop CPU:** $V_2 = 10^7$ (10 million) guesses/sec (reflecting standard multi-core cracking of unsalted fast hashes).
-3. **High-Performance Multi-GPU Rig:** $V_3 = 10^{11}$ (100 billion) guesses/sec (reflecting an 8x RTX 4090 cluster targeting fast hash algorithms).
+Where $V_{\text{guess}}$ represents an illustrative assumed guessing rate across three educational threat profiles:
+1. **Online Throttled Guessing:** $V_1 = 100$ guesses/sec (illustrative rate modeling service-level throttling, CAPTCHA, or lockout).
+2. **Offline Fast Desktop Guessing:** $V_2 = 10^7$ (10 million) guesses/sec (illustrative rate modeling desktop recovery of unsalted fast hashes).
+3. **High-Performance Cluster Guessing:** $V_3 = 10^{11}$ (100 billion) guesses/sec (illustrative rate modeling high-end hardware targeting fast hash algorithms).
 
-All crack time displays explicitly state that they are illustrative upper-bound calculations assuming uniform brute-force searches [CITATION REQUIRED].
+All guessing time displays explicitly state that they are illustrative upper-bound calculations assuming uniform brute-force searches [TODO: Citation needed - Combinatorial search modeling, NIST SP 800-63B Appendix A]. Real cracking speed depends heavily on password hashing algorithm, work factor, hardware, attack strategy, leaked information, and password structure.

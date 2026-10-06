@@ -3,13 +3,15 @@
 ## V. Experimental Design and Setup
 
 ### 6.1 Objective of the Experiment
-The primary purpose of the experimental evaluation is to empirically test the PasswordGuard heuristic analysis engine across a structured dataset of synthetic passwords representing common user construction paradigms. By systematically controlling password length, character diversity, and structural patterns, the experiment assesses:
-1. The correlation between password length and resulting strength scores.
-2. The impact of heuristic penalties on passwords possessing superficial complexity but predictable structures.
-3. The validity of multi-word passphrases in achieving strong classification and high entropy.
+The primary purpose of the experimental evaluation is to assess whether the implemented PasswordGuard heuristic behaves consistently with its design rules across controlled synthetic password categories. By systematically structuring password length, character diversity, and structural patterns, the experiment evaluates:
+1. How the heuristic score responds to increasing password length across synthetic categories.
+2. The impact of heuristic penalty deductions on passwords possessing superficial complexity but predictable structures.
+3. The response of the scoring engine and theoretical entropy calculations to multi-word passphrases.
+
+Importantly, this experiment evaluates heuristic consistency on controlled synthetic samples; it does not serve as an independent real-world cracking benchmark.
 
 ### 6.2 Synthetic Dataset Construction
-To eliminate privacy risks associated with leaked password compilations [CITATION REQUIRED], a reproducible dataset of 150 synthetic passwords was constructed, partitioned equally into five categories ($n = 30$ per category):
+To eliminate privacy risks associated with handling compromised personal credentials [TODO: Citation needed - Ethical handling of credential datasets in research, e.g., Thomas et al., 2017], a reproducible dataset of 150 intentionally constructed synthetic passwords was established, partitioned equally into five categories ($n = 30$ per category):
 
 - **Category A: Short Simple Passwords ($L \in [3, 5]$)**
   - Composed primarily of lowercase 3–5 letter words, occasionally with a single digit (e.g., `cat`, `dog`, `sun`, `red2`, `sky1`, `tree`).
@@ -22,12 +24,14 @@ To eliminate privacy risks associated with leaked password compilations [CITATIO
 - **Category E: Long Random Passwords ($L = 16$)**
   - High-entropy pseudo-random strings generated across all 4 character pools (e.g., `7$zW#9!kLp&2Qx@m`, `xK9#m$L2!vP8@qRt`, `B9#mK$2!xP8@qRtW`).
 
+The dataset is explicitly synthetic and does not represent the statistical distribution of passwords selected by the general human population.
+
 ### 6.3 Evaluation Metrics
-Each candidate password $p_i$ was evaluated programmatically, recording:
+Each candidate password $p_i$ was evaluated programmatically using the authoritative analyzer (`src/utils/passwordAnalyzer.ts`), recording:
 - Character length ($L_i$)
 - Diversity count ($D_i \in [1, 4]$)
 - Heuristic score ($S_i \in [0, 100]$)
-- Theoretical Shannon entropy ($E_i$ bits)
+- Theoretical character-space entropy estimate ($E_i$ bits under uniform assumption)
 - Categorical classification tier ($T_i \in \{\text{Weak}, \text{Medium}, \text{Strong}\}$)
 
-Aggregated group statistics were computed and serialized into `data/results.json` and `data/results.csv`.
+Aggregated group statistics were computed directly by `scripts/runExperiment.mjs` and serialized into `data/results.json` and `data/results.csv`.

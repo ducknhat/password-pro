@@ -11,17 +11,17 @@ export const HowPasswordsWorkView: React.FC = () => {
           How Password Authentication Works
         </h2>
         <p className="card-desc">
-          Password authentication is based on a "shared secret" protocol. The user proves their identity by presenting a secret string known only to the user and the authenticating server.
+          Password authentication operates on a prover-verifier model: the user proves knowledge of a secret password, while the server verifies it against a stored password verifier without storing the plaintext.
         </p>
 
         <div className="grid-3" style={{ marginTop: '1.25rem' }}>
           <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1.25rem', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#00f2fe', fontWeight: 700, marginBottom: '0.5rem' }}>
               <Key size={18} />
-              1. Shared Secret
+              1. Proving Knowledge
             </div>
             <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>
-              The client enters a secret string. If the secret matches the stored cryptographic record, access is granted.
+              The client enters a secret password. The client proves knowledge of the secret during authentication without the server needing to store plaintext credentials.
             </p>
           </div>
 
@@ -31,17 +31,17 @@ export const HowPasswordsWorkView: React.FC = () => {
               2. Search Space (R^L)
             </div>
             <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>
-              Security relies on making the number of possible secrets mathematically astronomical, so guessing is computationally unfeasible.
+              Security relies on making the candidate search space mathematically immense, so exhaustive guessing is computationally unfeasible.
             </p>
           </div>
 
           <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1.25rem', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#34d399', fontWeight: 700, marginBottom: '0.5rem' }}>
               <ShieldCheck size={18} />
-              3. One-Way Verification
+              3. Stored Verifier
             </div>
             <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>
-              Servers never store passwords in plaintext. Instead, they store a salted cryptographic hash to verify without knowing the plain text.
+              Production servers store a cryptographic password verifier (salted hash), verifying the submitted secret without exposing the plaintext in case of database theft.
             </p>
           </div>
         </div>

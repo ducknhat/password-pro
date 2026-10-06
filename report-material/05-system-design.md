@@ -18,7 +18,7 @@ The PasswordGuard system was designed as a modern, responsive Single-Page Applic
 |   Password Analyzer   |             |   Web Crypto Engine   |
 | - Heuristic Scoring   |             | - SHA-256 Digest      |
 | - Pattern Detection   |             | - 128-bit CSPRNG Salt |
-| - Shannon Entropy     |             | - Avalanche Simulator |
+| - Character Entropy   |             | - Salting Simulator   |
 | - Search Space (R^L)  |             +-----------------------+
 +-----------------------+
 ```
@@ -31,10 +31,11 @@ The analyzer module exports `analyzePassword()`, a pure TypeScript function that
 - Character pool size $R$ and diversity count (1 to 4)
 - Boolean flags for pattern vulnerabilities (consecutive repetition, dictionary substrings, keyboard sequences)
 - Numeric heuristic score ($0$ to $100$) and categorical tier (Weak, Medium, Strong)
-- Theoretical Shannon entropy in bits
+- Theoretical character-space entropy estimate in bits (under uniform assumption)
 - Array of passed/failed security requirements
 - Actionable improvement recommendations
-- Estimated exhaustive search times across the three assumed threat velocities
+- Estimated exhaustive search times across three illustrative assumed guessing rates
+- Complete score breakdown including `passphraseBonus` and `rawScore`
 
 #### 2. Cryptographic Sandbox (`src/utils/cryptoDemo.ts`)
 To illustrate one-way cryptographic hashing without external server dependencies, PasswordGuard interacts directly with the browser's hardware-accelerated Web Crypto API:
@@ -46,7 +47,7 @@ async function computeSha256(text: string): Promise<string> {
   return bufferToHex(hashBuffer);
 }
 ```
-A 16-byte random salt is generated via `window.crypto.getRandomValues()`. The UI performs dynamic computations of both $\text{SHA-256}(\text{password})$ and $\text{SHA-256}(\text{password} \parallel \text{salt})$, providing a live side-by-side view of digest differences and demonstrating the avalanche effect.
+A 16-byte random salt is generated via `window.crypto.getRandomValues()`. The UI performs dynamic computations of both $\text{SHA-256}(\text{password})$ and $\text{SHA-256}(\text{password} \parallel \text{salt})$, providing a live side-by-side view demonstrating how salting guarantees unique hash outputs across identical passwords and invalidates rainbow table lookups.
 
 #### 3. Data Visualization & UI Layer
 The visual presentation is styled using a modern, cybersecurity-focused dark theme in Vanilla CSS, ensuring high contrast, clean typography (using Plus Jakarta Sans and JetBrains Mono), and responsive multi-column grid layouts. Statistical visualizations are rendered through Recharts, including:

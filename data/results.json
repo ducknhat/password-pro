@@ -3,7 +3,7 @@
     "title": "PasswordGuard Heuristic Evaluation on Synthetic Passwords",
     "totalTested": 150,
     "categoryCount": 5,
-    "generatedAt": "2026-10-02",
+    "generatedAt": "2026-10-05",
     "privacyNotice": "Strictly synthetic passwords evaluated; zero sensitive credentials or user inputs stored."
   },
   "overallDistribution": [
@@ -254,10 +254,11 @@
     }
   ],
   "conclusions": [
-    "Category E (Long Random) achieved the highest average score (96.0/100) and 100% Strong classification due to high character diversity and 16-character length.",
-    "Category D (Long Passphrase) achieved Strong classification (avg score 85.0/100) and highest entropy (~160 bits) despite only using lowercase and delimiter hyphens, demonstrating the sheer mathematical advantage of length.",
-    "Category B (Common Patterns) scored poorly (avg score 18.2/100, 100% Weak) despite containing digits and special characters, proving that heuristic pattern penalties successfully neutralize superficial complexity.",
-    "Category A (Short Simple) scored lowest (avg score 9.3/100, 100% Weak) with less than 25 bits of entropy, highlighting vulnerability to near-instantaneous exhaustive searches.",
-    "Length exhibited a strong positive correlation with heuristic strength score, with passwords exceeding 16 characters overwhelmingly entering the Strong tier."
+    "Category E (E Long Random) achieved the highest average score (90/100) with 100% classified as Strong (30/30 samples) due to high character diversity coupled with 16-character length.",
+    "Category D (D Long Passphrase) achieved the highest theoretical character-space entropy estimate (182.9 bits under uniform assumption, avg score 75.8/100) despite utilizing only 2 character pools, demonstrating how length mathematically scales combinatorial search complexity.",
+    "Category C (C Medium Complexity) achieved an average score of 80.8/100 with 93.3% classified as Strong (28/30 samples), consistent with mixed alphanumeric and symbol rules.",
+    "Category B (B Common Pattern) scored poorly (avg score 10.5/100, 96.7% Weak, 29/30 samples) despite containing digits and punctuation, showing how heuristic pattern penalties neutralize superficial complexity.",
+    "Category A (A Short Simple) scored lowest (avg score 2/100, 100% Weak, 30/30 samples) with an average theoretical entropy estimate of 20.8 bits, reflecting minimal search spaces.",
+    "Across the 150 synthetic samples, the observed results are consistent with the scoring rules implemented in PasswordGuard, with longer passwords and pattern-free structures receiving higher tier classifications."
   ]
 }

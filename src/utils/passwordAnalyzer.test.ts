@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { analyzePassword, formatCrackDuration } from './passwordAnalyzer';
+import { analyzePassword, formatCrackDuration, classifyScore } from './passwordAnalyzer';
 
 describe('PasswordGuard Analyzer Unit Tests', () => {
   it('handles empty password correctly', () => {
@@ -82,12 +82,33 @@ describe('PasswordGuard Analyzer Unit Tests', () => {
     // 40-69: Medium
     const medRes = analyzePassword('Summer2026!');
     expect(medRes.score).toBeGreaterThanOrEqual(40);
-    expect(medRes.score).toBeLessThanOrEqual(80);
+    expect(medRes.score).toBeLessThanOrEqual(69);
+    expect(medRes.tier).toBe('Medium');
 
     // 70-100: Strong
     const strongRes = analyzePassword('Kx9#vP2@mQ4$zL7!');
     expect(strongRes.score).toBeGreaterThanOrEqual(70);
     expect(strongRes.tier).toBe('Strong');
+  });
+
+  it('explicitly classifies scores at exact boundary points', () => {
+    expect(classifyScore(0).tier).toBe('Weak');
+    expect(classifyScore(39).tier).toBe('Weak');
+    expect(classifyScore(40).tier).toBe('Medium');
+    expect(classifyScore(69).tier).toBe('Medium');
+    expect(classifyScore(70).tier).toBe('Strong');
+    expect(classifyScore(100).tier).toBe('Strong');
+  });
+
+  it('verifies that scoreBreakdown correctly sums rawScore including passphraseBonus', () => {
+    const res = analyzePassword('correct-horse-battery-staple');
+    expect(res.scoreBreakdown.passphraseBonus).toBeGreaterThan(0);
+    const expectedRaw = res.scoreBreakdown.lengthScore 
+      + res.scoreBreakdown.varietyScore 
+      + res.scoreBreakdown.diversityBonus 
+      + res.scoreBreakdown.passphraseBonus 
+      - res.scoreBreakdown.penalties;
+    expect(res.scoreBreakdown.rawScore).toBe(expectedRaw);
   });
 
   it('formats crack durations realistically', () => {

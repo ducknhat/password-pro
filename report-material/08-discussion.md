@@ -2,22 +2,23 @@
 
 ## VII. Discussion
 
-### 8.1 The Fallacy of Superficial Complexity
-A prominent outcome of this experiment is the failure of "superficial complexity" observed in Category B. In traditional corporate password environments, users are frequently forced to comply with rigid composition rules (e.g., "must contain at least one uppercase letter, one digit, and one symbol") [CITATION REQUIRED]. In practice, human psychology circumvents these requirements predictably: users write a dictionary word, capitalize the first letter, and append `123!` or the current year at the end.
+### 8.1 The Limitations of Superficial Complexity
+A notable outcome observed in this evaluation is the failure of "superficial complexity" in Category B. In traditional corporate environments, users are frequently required to comply with rigid composition rules (such as requiring uppercase letters, digits, and symbols) [TODO: Citation needed - Composition policy studies, e.g., Komanduri et al., 2011]. In practice, human users frequently satisfy these requirements predictably: selecting a dictionary root, capitalizing the first letter, and appending `123!` or a year at the end.
 
-Standard metric tools that merely verify boolean regular expressions ($[A-Z]$, $[0-9]$, etc.) falsely rate such passwords as secure. In contrast, PasswordGuard's contextual penalty structure reduces scores drastically (averaging 10.5 / 100), accurately reflecting real-world vulnerability to rule-based tools such as Hashcat and John the Ripper [CITATION REQUIRED].
+Standard validation meters that merely verify boolean character presence ($[A-Z]$, $[0-9]$, etc.) may classify such passwords in higher tiers. In contrast, PasswordGuard applies penalties intended to represent the increased guessability of predictable structures commonly targeted by dictionary and rule-based attacks (averaging 10.5 / 100 across Category B samples) [TODO: Citation needed - Rule-based password cracking, e.g., Weir et al., 2009 / Hashcat documentation].
 
 ### 8.2 Passphrases vs. High-Entropy Random Strings
-The comparison between Category D (Long Passphrase, avg length 31.1) and Category E (Long Random, length 16) highlights the fundamental trade-off between human usability and machine density:
-- **Category E** concentrates 105.1 bits of entropy into just 16 characters. However, such strings are virtually impossible for human memory, necessitating password manager adoption [CITATION REQUIRED].
-- **Category D** achieves 182.9 bits of theoretical Shannon entropy across 31 characters using ordinary natural language words separated by delimiters. Because words can be visualized as semantic mental images, passphrases are significantly easier for humans to retain while providing extraordinary mathematical resistance against exhaustive searches [CITATION REQUIRED].
+The comparison between Category D (Long Passphrase, mean length 31.1) and Category E (Long Random, length 16) shows two different approaches to password construction: memorable passphrases and compact random passwords:
+- **Category E** concentrates an estimated 105.1 bits of theoretical character-space entropy into 16 characters. However, such strings are difficult for human memory, necessitating password manager adoption [TODO: Citation needed - Password usability & manager studies, e.g., Ur et al., 2015].
+- **Category D** produced an average theoretical character-space entropy estimate of 182.9 bits under the uniform-character assumption across 31 characters using natural language words separated by delimiters. Because words can be visualized as semantic concepts, passphrases can be easier for humans to retain while providing substantially expanded theoretical search spaces [TODO: Citation needed - Passphrase analysis, NIST SP 800-63B Appendix A].
 
-These findings align with modern standards set forth by the National Institute of Standards and Technology (NIST SP 800-63B), which strongly advocate for length and passphrases over arbitrary character replacement rules [CITATION REQUIRED].
+These observations are consistent with modern authentication guidance set forth by the National Institute of Standards and Technology (NIST SP 800-63B), which emphasizes length and passphrases over arbitrary character replacement rules [NIST SP 800-63B].
 
-### 8.3 Defense in Depth: Beyond Client-Side Evaluation
-While PasswordGuard equips users to choose resilient credentials, password strength alone is insufficient to guarantee account security. An attacker who executes a successful phishing attack or compromises an endpoint with a keystroke logger captures the password regardless of whether it scored 100 on an analyzer [CITATION REQUIRED]. 
+### 8.3 Defense in Depth: Beyond Heuristic Strength Evaluation
+While PasswordGuard equips students to analyze credential structure, password strength alone cannot guarantee account security. An adversary executing a successful phishing attack or deploying endpoint keyloggers captures the secret regardless of its heuristic score on a meter [TODO: Citation needed - Authentication threat taxonomy, Bonneau et al., 2012]. 
 
-Consequently, modern security architecture must implement Defense in Depth:
-1. **Multi-Factor Authentication (MFA):** Requiring an independent second factor (e.g., FIDO2 / WebAuthn hardware security keys or TOTP authenticator apps) prevents unauthorized access even when credentials are leaked [CITATION REQUIRED].
-2. **Breached-Password Interception:** Verifying newly registered passwords against historical leak repositories (utilizing $k$-anonymity API models) prevents users from choosing known compromised credentials [CITATION REQUIRED].
-3. **Throttling & IP Reputation:** Implementing rate limits, CAPTCHA challenges, and behavioral risk analysis restricts automated brute-force attempts to negligible speeds [CITATION REQUIRED].
+Consequently, modern security architecture relies on Defense in Depth:
+1. **Multi-Factor Authentication (MFA):** Requiring an independent secondary factor (e.g., FIDO2 / WebAuthn hardware keys or TOTP authenticators) prevents unauthorized access even when credentials are compromised [TODO: Citation needed - MFA standards, NIST SP 800-63B].
+2. **Breached-Password Checking:** Verifying newly registered passwords against historical leak repositories (via $k$-anonymity models) prevents users from choosing known compromised credentials [TODO: Citation needed - Breached password checking, e.g., Hunt, 2018].
+3. **Throttling & Rate-Limiting:** Implementing server-side rate limits, CAPTCHA challenges, and IP reputation checks restricts automated guessing attacks to negligible throughput [TODO: Citation needed - Rate-limiting guidelines, NIST SP 800-63B].
+

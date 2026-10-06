@@ -48,7 +48,9 @@ export interface PasswordAnalysisResult {
     lengthScore: number;
     varietyScore: number;
     diversityBonus: number;
+    passphraseBonus: number;
     penalties: number;
+    rawScore: number;
   };
 }
 
@@ -89,12 +91,32 @@ export function formatCrackDuration(seconds: number): string {
 }
 
 /**
+ * Tier classification helper based on explicit boundary rules
+ * 0–39   = Weak
+ * 40–69  = Medium
+ * 70–100 = Strong
+ */
+export function classifyScore(score: number): {
+  tier: 'Weak' | 'Medium' | 'Strong';
+  tierColor: string;
+} {
+  if (score >= 70) {
+    return { tier: 'Strong', tierColor: '#10b981' };
+  }
+  if (score >= 40) {
+    return { tier: 'Medium', tierColor: '#f59e0b' };
+  }
+  return { tier: 'Weak', tierColor: '#ef4444' };
+}
+
+/**
  * Main Analysis Function
  */
 export function analyzePassword(pwd: string): PasswordAnalysisResult {
   const length = pwd.length;
 
   if (length === 0) {
+    const { tier, tierColor } = classifyScore(0);
     return {
       passwordLength: 0,
       hasLower: false,
@@ -107,8 +129,8 @@ export function analyzePassword(pwd: string): PasswordAnalysisResult {
       hasSequentialPattern: false,
       hasCommonPattern: false,
       score: 0,
-      tier: 'Weak',
-      tierColor: '#ef4444',
+      tier,
+      tierColor,
       estimatedEntropyBits: 0,
       searchSpaceCombinations: '0',
       searchSpaceBigIntApprox: 0,
@@ -122,7 +144,7 @@ export function analyzePassword(pwd: string): PasswordAnalysisResult {
       warnings: [],
       recommendations: ['Enter a password to begin heuristic security evaluation.'],
       crackEstimates: [],
-      scoreBreakdown: { lengthScore: 0, varietyScore: 0, diversityBonus: 0, penalties: 0 }
+      scoreBreakdown: { lengthScore: 0, varietyScore: 0, diversityBonus: 0, passphraseBonus: 0, penalties: 0, rawScore: 0 }
     };
   }
 
@@ -215,16 +237,8 @@ export function analyzePassword(pwd: string): PasswordAnalysisResult {
   let rawScore = lengthScore + varietyScore + diversityBonus + passphraseBonus - penalties;
   const score = Math.max(0, Math.min(100, Math.round(rawScore)));
 
-  // Tier assignment
-  let tier: 'Weak' | 'Medium' | 'Strong' = 'Weak';
-  let tierColor = '#ef4444'; // Red
-  if (score >= 70) {
-    tier = 'Strong';
-    tierColor = '#10b981'; // Emerald
-  } else if (score >= 40) {
-    tier = 'Medium';
-    tierColor = '#f59e0b'; // Amber
-  }
+  // Tier assignment via authoritative classification helper
+  const { tier, tierColor } = classifyScore(score);
 
   // Estimated Entropy (Bits): E = L * log2(R)
   const estimatedEntropyBits = poolSize > 0 ? Math.round(length * Math.log2(poolSize) * 10) / 10 : 0;
@@ -318,22 +332,22 @@ export function analyzePassword(pwd: string): PasswordAnalysisResult {
 
   const scenarios = [
     {
-      scenario: 'Online Attack (Rate-Limited)',
+      scenario: 'Online Throttled Guessing',
       ratePerSecond: 100,
-      rateLabel: '100 guesses/sec',
-      assumption: 'Assumes strict online web server throttling, CAPTCHA, or account lockout policy.'
+      rateLabel: '100 guesses/sec (illustrative)',
+      assumption: 'Illustrative rate assuming service-level throttling, rate-limiting, CAPTCHA, or lockout mechanisms.'
     },
     {
-      scenario: 'Offline Fast CPU',
+      scenario: 'Offline Fast Desktop Guessing',
       ratePerSecond: 1e7, // 10 million / sec
-      rateLabel: '10,000,000 guesses/sec',
-      assumption: 'Assumes attacker obtained hashed database and tests on single multi-core desktop CPU.'
+      rateLabel: '10,000,000 guesses/sec (illustrative)',
+      assumption: 'Illustrative rate modeling offline search on desktop hardware against fast unsalted hashes.'
     },
     {
-      scenario: 'High-End Multi-GPU Rig',
+      scenario: 'Offline High-Speed Cluster Guessing',
       ratePerSecond: 1e11, // 100 billion / sec
-      rateLabel: '100,000,000,000 guesses/sec',
-      assumption: 'Assumes offline cracking on dedicated high-performance GPU cluster (e.g. 8x RTX 4090).'
+      rateLabel: '100,000,000,000 guesses/sec (illustrative)',
+      assumption: 'Illustrative high-throughput rate against fast unsalted hashes. Real cracking depends heavily on hashing algorithm, work factor, hardware, attack strategy, and password structure.'
     }
   ];
 
@@ -375,7 +389,9 @@ export function analyzePassword(pwd: string): PasswordAnalysisResult {
       lengthScore,
       varietyScore,
       diversityBonus,
-      penalties
+      passphraseBonus,
+      penalties,
+      rawScore
     }
   };
 }

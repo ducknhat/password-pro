@@ -101,12 +101,12 @@ export const AnalyzerView: React.FC = () => {
               </span>
               <span style={{ marginLeft: '0.75rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                 {result.passwordLength === 0 
-                  ? 'Awaiting input' 
+                  ? 'Awaiting candidate password' 
                   : result.score < 40 
-                    ? 'Easily vulnerable to automated attacks' 
+                    ? 'Weak according to PasswordGuard heuristic' 
                     : result.score < 70 
-                      ? 'Moderate defense against offline search' 
-                      : 'Robust resistance to exhaustive cracking'}
+                      ? 'Medium according to PasswordGuard heuristic' 
+                      : 'Strong according to PasswordGuard heuristic'}
               </span>
             </div>
             <div className="score-text" style={{ color: result.tierColor }}>
@@ -126,21 +126,30 @@ export const AnalyzerView: React.FC = () => {
           </div>
 
           <p className="heuristic-note">
-            * Note: This score is an educational heuristic reflecting structural complexity, not an absolute guarantee of safety.
+            * Note: Educational heuristic score reflecting structural complexity. The result does not guarantee real-world security.
           </p>
         </div>
 
-        {/* Score Breakdown Pills */}
+        {/* Score Breakdown */}
         {password.length > 0 && (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.75rem' }}>
-            <span className="check-detail-tag">Length: +{result.scoreBreakdown.lengthScore} pts</span>
-            <span className="check-detail-tag">Variety: +{result.scoreBreakdown.varietyScore} pts</span>
-            {result.scoreBreakdown.diversityBonus > 0 && (
-              <span className="check-detail-tag" style={{ color: '#34d399' }}>Diversity Bonus: +{result.scoreBreakdown.diversityBonus} pts</span>
-            )}
-            {result.scoreBreakdown.penalties > 0 && (
-              <span className="check-detail-tag" style={{ color: '#f87171' }}>Penalties: -{result.scoreBreakdown.penalties} pts</span>
-            )}
+          <div style={{ marginTop: '0.75rem' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+              <span className="check-detail-tag">Length: +{result.scoreBreakdown.lengthScore}</span>
+              <span className="check-detail-tag">Variety: +{result.scoreBreakdown.varietyScore}</span>
+              {result.scoreBreakdown.diversityBonus > 0 && (
+                <span className="check-detail-tag" style={{ color: '#34d399' }}>Diversity Bonus: +{result.scoreBreakdown.diversityBonus}</span>
+              )}
+              {result.scoreBreakdown.passphraseBonus > 0 && (
+                <span className="check-detail-tag" style={{ color: '#38bdf8' }}>Passphrase Bonus: +{result.scoreBreakdown.passphraseBonus}</span>
+              )}
+              {result.scoreBreakdown.penalties > 0 && (
+                <span className="check-detail-tag" style={{ color: '#f87171' }}>Penalties: -{result.scoreBreakdown.penalties}</span>
+              )}
+              <span className="check-detail-tag" style={{ fontWeight: 700, borderColor: 'var(--border-color)', color: '#e2e8f0' }}>
+                Raw Score: {result.scoreBreakdown.rawScore}
+                {result.scoreBreakdown.rawScore !== result.score && ` (Clamped to ${result.score})`}
+              </span>
+            </div>
           </div>
         )}
       </div>
@@ -216,15 +225,15 @@ export const AnalyzerView: React.FC = () => {
         <div className="card">
           <h3 className="card-title">
             <Zap size={18} color="#00f2fe" />
-            Estimated Password Entropy
+            Theoretical Character-Space Entropy Estimate
           </h3>
-          <p className="card-desc">Theoretical measure of uncertainty based on character pool size.</p>
+          <p className="card-desc">Theoretical measure of uncertainty based on character pool size under a uniform-character assumption.</p>
 
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.6rem', marginBottom: '1rem' }}>
             <span style={{ fontSize: '2.4rem', fontWeight: 800, color: '#00f2fe', fontFamily: 'var(--font-mono)' }}>
               {result.estimatedEntropyBits}
             </span>
-            <span style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>bits of entropy</span>
+            <span style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>bits (theoretical estimate)</span>
           </div>
 
           <div className="mono-snippet" style={{ marginBottom: '1rem' }}>
@@ -235,8 +244,7 @@ export const AnalyzerView: React.FC = () => {
           <div className="alert-box alert-info" style={{ fontSize: '0.82rem' }}>
             <HelpCircle size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
             <div>
-              <strong>Academic Note:</strong> Shannon entropy assumes characters are chosen uniformly at random.
-              Because humans tend to choose predictable patterns, real-world entropy is typically lower than this upper-bound estimate.
+              <strong>Academic Note:</strong> This calculation represents a theoretical character-space entropy estimate under a uniform-character assumption. Human-generated passwords are not uniformly random, so actual guessability may be substantially worse than this estimate suggests.
             </div>
           </div>
         </div>
@@ -245,9 +253,9 @@ export const AnalyzerView: React.FC = () => {
         <div className="card">
           <h3 className="card-title">
             <Cpu size={18} color="#a855f7" />
-            Illustrative Exhaustive Search Complexity
+            Illustrative Search Space & Guessing Time
           </h3>
-          <p className="card-desc">Theoretical time required to guess password under exhaustive search.</p>
+          <p className="card-desc">Theoretical time required under illustrative assumed guessing rates (not a hardware benchmark).</p>
 
           <div style={{ marginBottom: '1rem' }}>
             <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.2rem' }}>Theoretical Combinations:</div>
@@ -260,8 +268,8 @@ export const AnalyzerView: React.FC = () => {
             <thead>
               <tr>
                 <th>Attack Scenario</th>
-                <th>Assumed Speed</th>
-                <th>Avg. Crack Time</th>
+                <th>Illustrative Rate</th>
+                <th>Avg. Guess Time</th>
               </tr>
             </thead>
             <tbody>
@@ -283,7 +291,7 @@ export const AnalyzerView: React.FC = () => {
           </table>
 
           <p className="heuristic-note">
-            * Assumptions: Exhaustive search takes on average 50% of the total space. Real attackers prioritize dictionaries, credential leaks, and mutated patterns first.
+            * Assumptions: Illustrative educational calculations based on exhaustive search (R^L / 2) under assumed rates. Real cracking speed depends heavily on password hashing algorithm, work factor, hardware, attack strategy, leaked information, and password structure.
           </p>
         </div>
       </div>
@@ -295,7 +303,7 @@ export const AnalyzerView: React.FC = () => {
           The Exponential Power of Password Length
         </h3>
         <p className="card-desc">
-          Comparing search space size as length increases using the active character pool size ({result.characterPoolSize || 26} characters).
+          Comparing theoretical search space size as length increases using the active character pool size ({result.characterPoolSize || 26} characters).
         </p>
 
         <div style={{ overflowX: 'auto' }}>
@@ -305,8 +313,8 @@ export const AnalyzerView: React.FC = () => {
                 <th>Length (L)</th>
                 <th>Character Pool (R)</th>
                 <th>Search Space (R^L)</th>
-                <th>Entropy</th>
-                <th>High-End GPU Rig Crack Time (10¹¹/s)</th>
+                <th>Theoretical Entropy</th>
+                <th>Illustrative High-Speed Rate (10¹¹/s)</th>
               </tr>
             </thead>
             <tbody>

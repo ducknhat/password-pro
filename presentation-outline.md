@@ -191,7 +191,7 @@
   > On the other hand, look at Category B. 
   > Even though Category B had capital letters, numbers, and exclamation marks, our analyzer gave it an average score of only 10.5. 
   > Why? Because predictable patterns like '123!' or 'admin' do not fool modern security tools. 
-  > This proves that length and unpredictability are what truly protect you."
+  > This clearly shows how our heuristic rewards length and penalizes predictable patterns."
 
 ---
 

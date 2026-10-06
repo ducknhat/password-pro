@@ -38,7 +38,7 @@ export const App: React.FC = () => {
               <span className="brand-badge">Academic Demo</span>
             </div>
             <p className="brand-subtitle">
-              Understand how secure your password really is.
+              Educational structural evaluation of password strength and authentication mechanics.
             </p>
           </div>
         </div>

@@ -10,108 +10,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Import the analyzer logic (self-contained for node script execution)
-const COMMON_PATTERNS = [
-  'password', 'p@ssword', 'passw0rd', '123456', '12345678', '123456789',
-  'qwerty', 'admin', 'administrator', 'welcome', 'letmein', 'monkey',
-  'iloveyou', 'dragon', 'football', 'baseball', 'princess', 'sunshine',
-  'master', 'shadow', 'superman', 'batman', 'trustno1', 'secret',
-  'login', 'root', 'changeme', 'hello', 'default', 'test1234'
-];
-
-const SEQUENCES = [
-  '0123', '1234', '2345', '3456', '4567', '5678', '6789', '7890',
-  '9876', '8765', '7654', '6543', '5432', '4321', '3210',
-  'abcd', 'bcde', 'cdef', 'defg', 'efgh', 'fghi', 'ghij', 'hijk',
-  'ijkl', 'jklm', 'klmn', 'lmno', 'mnop', 'nopq', 'opqr', 'pqrs',
-  'qrst', 'rstu', 'stuv', 'tuvw', 'uvwx', 'vwxy', 'wxyz',
-  'qwerty', 'asdfgh', 'zxcvbn', 'qwertz', 'azerty'
-];
-
-function analyze(pwd) {
-  const length = pwd.length;
-  if (length === 0) return { score: 0, tier: 'Weak', entropy: 0, diversity: 0, length: 0 };
-
-  const hasLower = /[a-z]/.test(pwd);
-  const hasUpper = /[A-Z]/.test(pwd);
-  const hasNumber = /[0-9]/.test(pwd);
-  const hasSpecial = /[^a-zA-Z0-9]/.test(pwd);
-
-  let poolSize = 0;
-  let diversity = 0;
-  if (hasLower) { poolSize += 26; diversity++; }
-  if (hasUpper) { poolSize += 26; diversity++; }
-  if (hasNumber) { poolSize += 10; diversity++; }
-  if (hasSpecial) { poolSize += 33; diversity++; }
-  if (poolSize === 0) poolSize = 1;
-
-  const hasRepeatedConsecutive = /(.)\1\1/.test(pwd);
-  const uniqueCharRatio = new Set(pwd.split('')).size / length;
-  const hasRepeatedChars = hasRepeatedConsecutive || (length > 6 && uniqueCharRatio < 0.45);
-
-  const lowerPwd = pwd.toLowerCase();
-  let hasSequentialPattern = false;
-  for (const seq of SEQUENCES) {
-    if (lowerPwd.includes(seq)) {
-      hasSequentialPattern = true;
-      break;
-    }
-  }
-
-  let hasCommonPattern = false;
-  for (const common of COMMON_PATTERNS) {
-    if (lowerPwd.includes(common)) {
-      hasCommonPattern = true;
-      break;
-    }
-  }
-
-  let lengthScore = 0;
-  if (length >= 16) lengthScore = 40;
-  else if (length >= 12) lengthScore = 32;
-  else if (length >= 8) lengthScore = 20;
-  else if (length >= 6) lengthScore = 10;
-  else lengthScore = 4;
-
-  let varietyScore = 0;
-  if (hasLower) varietyScore += 8;
-  if (hasUpper) varietyScore += 8;
-  if (hasNumber) varietyScore += 9;
-  if (hasSpecial) varietyScore += 10;
-
-  let diversityBonus = 0;
-  if (diversity === 4) diversityBonus = 15;
-  else if (diversity === 3) diversityBonus = 8;
-  else if (diversity === 2) diversityBonus = 3;
-
-  let passphraseBonus = 0;
-  const uniqueCount = new Set(pwd.split('')).size;
-  if (length >= 20 && uniqueCount >= 10 && !hasSequentialPattern) {
-    passphraseBonus = 20;
-  } else if (length >= 16 && (pwd.includes('-') || pwd.includes(' ') || pwd.includes('_')) && uniqueCount >= 8) {
-    passphraseBonus = 15;
-  }
-
-  let penalties = 0;
-  if (length < 8) penalties += 20;
-  else if (length < 12) penalties += 8;
-
-  if (hasRepeatedChars) penalties += 15;
-  if (hasSequentialPattern) penalties += 15;
-  if (hasCommonPattern) penalties += 25;
-  if (diversity <= 1 && length < 16) penalties += 15;
-
-  const rawScore = lengthScore + varietyScore + diversityBonus + passphraseBonus - penalties;
-  const score = Math.max(0, Math.min(100, Math.round(rawScore)));
-
-  let tier = 'Weak';
-  if (score >= 70) tier = 'Strong';
-  else if (score >= 40) tier = 'Medium';
-
-  const entropy = Math.round(length * Math.log2(poolSize) * 10) / 10;
-
-  return { length, diversity, score, tier, entropy };
-}
+import { analyzePassword } from '../src/utils/passwordAnalyzer.ts';
 
 // 150 Synthetic Test Passwords (30 per category)
 const SYNTHETIC_DATASET = {
@@ -221,11 +120,11 @@ for (const [catKey, list] of Object.entries(SYNTHETIC_DATASET)) {
   let strongCount = 0;
 
   list.forEach((pwd, idx) => {
-    const res = analyze(pwd);
+    const res = analyzePassword(pwd);
     sumScore += res.score;
-    sumEntropy += res.entropy;
-    sumLength += res.length;
-    sumDiversity += res.diversity;
+    sumEntropy += res.estimatedEntropyBits;
+    sumLength += res.passwordLength;
+    sumDiversity += res.diversityCount;
 
     if (res.tier === 'Weak') { weakCount++; totalWeak++; }
     else if (res.tier === 'Medium') { mediumCount++; totalMedium++; }
@@ -234,9 +133,9 @@ for (const [catKey, list] of Object.entries(SYNTHETIC_DATASET)) {
     allSamples.push({
       sampleId: `${catKey}_${idx + 1}`,
       category: catKey,
-      length: res.length,
-      diversity: res.diversity,
-      entropy: res.entropy,
+      length: res.passwordLength,
+      diversity: res.diversityCount,
+      entropy: res.estimatedEntropyBits,
       score: res.score,
       tier: res.tier
     });
@@ -307,12 +206,19 @@ const overallDistribution = [
   { tier: 'Strong', count: totalStrong, percentage: Math.round((totalStrong / totalSamples) * 1000) / 10, color: '#10b981' }
 ];
 
+// Dynamically derive conclusions directly from categoryStats
+const catA = categoryStats.find(c => c.categoryKey === 'A_Short_Simple') || categoryStats[0];
+const catB = categoryStats.find(c => c.categoryKey === 'B_Common_Pattern') || categoryStats[1];
+const catC = categoryStats.find(c => c.categoryKey === 'C_Medium_Complexity') || categoryStats[2];
+const catD = categoryStats.find(c => c.categoryKey === 'D_Long_Passphrase') || categoryStats[3];
+const catE = categoryStats.find(c => c.categoryKey === 'E_Long_Random') || categoryStats[4];
+
 const experimentOutput = {
   metadata: {
     title: 'PasswordGuard Heuristic Evaluation on Synthetic Passwords',
     totalTested: totalSamples,
     categoryCount: categoryStats.length,
-    generatedAt: '2026-10-02',
+    generatedAt: '2026-10-05',
     privacyNotice: 'Strictly synthetic passwords evaluated; zero sensitive credentials or user inputs stored.'
   },
   overallDistribution,
@@ -320,11 +226,12 @@ const experimentOutput = {
   lengthVsScore,
   diversityVsScore,
   conclusions: [
-    'Category E (Long Random) achieved the highest average score (96.0/100) and 100% Strong classification due to high character diversity and 16-character length.',
-    'Category D (Long Passphrase) achieved Strong classification (avg score 85.0/100) and highest entropy (~160 bits) despite only using lowercase and delimiter hyphens, demonstrating the sheer mathematical advantage of length.',
-    'Category B (Common Patterns) scored poorly (avg score 18.2/100, 100% Weak) despite containing digits and special characters, proving that heuristic pattern penalties successfully neutralize superficial complexity.',
-    'Category A (Short Simple) scored lowest (avg score 9.3/100, 100% Weak) with less than 25 bits of entropy, highlighting vulnerability to near-instantaneous exhaustive searches.',
-    'Length exhibited a strong positive correlation with heuristic strength score, with passwords exceeding 16 characters overwhelmingly entering the Strong tier.'
+    `Category E (${catE.categoryName}) achieved the highest average score (${catE.avgScore}/100) with ${catE.strongPct}% classified as Strong (${catE.strongCount}/${catE.sampleCount} samples) due to high character diversity coupled with 16-character length.`,
+    `Category D (${catD.categoryName}) achieved the highest theoretical character-space entropy estimate (${catD.avgEntropyBits} bits under uniform assumption, avg score ${catD.avgScore}/100) despite utilizing only 2 character pools, demonstrating how length mathematically scales combinatorial search complexity.`,
+    `Category C (${catC.categoryName}) achieved an average score of ${catC.avgScore}/100 with ${catC.strongPct}% classified as Strong (${catC.strongCount}/${catC.sampleCount} samples), consistent with mixed alphanumeric and symbol rules.`,
+    `Category B (${catB.categoryName}) scored poorly (avg score ${catB.avgScore}/100, ${catB.weakPct}% Weak, ${catB.weakCount}/${catB.sampleCount} samples) despite containing digits and punctuation, showing how heuristic pattern penalties neutralize superficial complexity.`,
+    `Category A (${catA.categoryName}) scored lowest (avg score ${catA.avgScore}/100, ${catA.weakPct}% Weak, ${catA.weakCount}/${catA.sampleCount} samples) with an average theoretical entropy estimate of ${catA.avgEntropyBits} bits, reflecting minimal search spaces.`,
+    `Across the 150 synthetic samples, the observed results are consistent with the scoring rules implemented in PasswordGuard, with longer passwords and pattern-free structures receiving higher tier classifications.`
   ]
 };
 
