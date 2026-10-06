@@ -129,7 +129,7 @@ describe('PasswordGuard Analyzer Unit Tests', () => {
       expect(res.score).toBeGreaterThanOrEqual(70);
       expect(res.tier).toBe('Strong');
       expect(Number.isFinite(res.estimatedEntropyBits)).toBe(true);
-      expect(Number.isFinite(res.searchSpaceBigIntApprox)).toBe(true);
+      expect(Number.isFinite(res.searchSpaceLog10)).toBe(true);
       expect(res.searchSpaceCombinations).not.toContain('Infinity');
       expect(res.searchSpaceCombinations).not.toContain('NaN');
       res.crackEstimates.forEach(est => {
@@ -146,7 +146,7 @@ describe('PasswordGuard Analyzer Unit Tests', () => {
       expect(res.tier).toBe('Strong');
       expect(res.searchSpaceCombinations).not.toContain('Infinity');
       expect(res.searchSpaceCombinations).not.toContain('NaN');
-      expect(Number.isFinite(res.searchSpaceBigIntApprox)).toBe(true);
+      expect(Number.isFinite(res.searchSpaceLog10)).toBe(true);
       res.crackEstimates.forEach(est => {
         expect(Number.isFinite(est.seconds)).toBe(true);
         expect(est.displayTime).not.toContain('Infinity');
@@ -170,8 +170,8 @@ describe('PasswordGuard Analyzer Unit Tests', () => {
       expect(res.searchSpaceCombinations).toMatch(/^\d+\.\d{2}e\+\d+$/);
 
       // Log-space magnitude should be a finite positive number
-      expect(Number.isFinite(res.searchSpaceBigIntApprox)).toBe(true);
-      expect(res.searchSpaceBigIntApprox).toBeGreaterThan(900); // 500 * log10(95) ≈ 988.8
+      expect(Number.isFinite(res.searchSpaceLog10)).toBe(true);
+      expect(res.searchSpaceLog10).toBeGreaterThan(900); // 500 * log10(95) ≈ 988.8
 
       // Entropy should be finite
       expect(Number.isFinite(res.estimatedEntropyBits)).toBe(true);

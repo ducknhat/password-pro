@@ -22,10 +22,10 @@ Across the entire 150-sample dataset:
 ### 7.2 Analysis of Category Findings
 
 #### 1. Category A (Short Simple)
-Category A yielded an average score of only 2.0 / 100 and an average theoretical entropy of 20.8 bits. With an average length of 4.2 characters, the combinatorial space is tiny ($R^L \approx 26^4 \approx 4.5 \times 10^5$), rendering these passwords cracked in under a millisecond even under modest computing rates. All 30 samples (100%) were classified as Weak.
+Category A yielded an average score of only 2.0 / 100 and an average theoretical entropy of 20.8 bits. With an average length of 4.2 characters, the combinatorial space is tiny ($R^L \approx 26^4 \approx 4.5 \times 10^5$), resulting in sub-second search times under the illustrative computing rates. All 30 samples (100.0%) were classified as Weak.
 
 #### 2. Category B (Common Pattern)
-Category B passwords demonstrated the effectiveness of the heuristic penalty engine. Despite having an average length of 9.6 characters and often containing uppercase letters, numbers, and symbols (e.g., `admin2024!`, `Password123!`), the presence of sequential runs and known dictionary roots triggered major deductions (-25 pts for common pattern, -15 pts for sequences). Consequently, 29 out of 30 passwords (96.7%) were classified as Weak, with an average score of just 10.5 / 100.
+Category B passwords demonstrated the impact of the heuristic penalty engine. Despite having an average length of 9.6 characters and often containing uppercase letters, numbers, and symbols (e.g., `admin2024!`, `Password123!`), the presence of sequential runs and known dictionary roots triggered major deductions (-25 pts for common pattern, -15 pts for sequences). Consequently, 29 out of 30 passwords (96.7%) were classified as Weak, with an average score of just 10.5 / 100.
 
 #### 3. Category C (Medium Complexity)
 Category C passwords reflected the traditional enterprise policy of combining uppercase, lowercase, numbers, and special symbols over a 12–15 character length. With maximum diversity (4.0/4) and an average length of 13.0, the group attained an average score of 80.8 / 100 and 85.4 bits of entropy. 28 of the 30 samples (93.3%) achieved Strong classification.

@@ -172,4 +172,37 @@
 - **Simple English Answer:**  
   "They use a clever technique called $k$-Anonymity. The website hashes the password, sends only the first 5 characters of the hash to the breach database, and gets back a list of matching hashes to compare privately on the user's computer."
 - **Technical Answer:**  
-  "Services like 'Have I Been Pwned' utilize $k$-anonymity via SHA-1 or SHA-256 prefixes. The client hashes the password and transmits only the first 5 hexadecimal characters of the digest. The API responds with the set of all known breached hash suffixes matching that 5-character prefix. The client then searches the returned list locally, ensuring the full hash never leaves the client."
+  "Services like 'Have I Been Pwned' utilize $k$-anonymity via hash prefixes. The client hashes the password and transmits only the first 5 hexadecimal characters of the digest. The API responds with the set of all known breached hash suffixes matching that 5-character prefix. The client then searches the returned list locally, ensuring the full hash never leaves the client."
+
+---
+
+### Question 22: Why does your experiment prove anything if your own algorithm scores the passwords?
+- **Simple English Answer:**  
+  "Our experiment does not claim to prove real-world cracking resistance. It is a controlled evaluation to check if our heuristic responds consistently across different password types as designed."
+- **Technical Answer:**  
+  "The experiment assesses the internal functional consistency and sensitivity of the heuristic across controlled structural categories. Because the scoring rules and evaluation engine share the same heuristic, we do not present the results as an independent real-world cracking benchmark, but rather as a verified measurement of how the heuristic model penalizes predictable patterns and rewards length."
+
+---
+
+### Question 23: Does entropy mean the password is actually random?
+- **Simple English Answer:**  
+  "No. Our app calculates theoretical character-space entropy, which assumes every character was chosen completely at random. But humans are not random—people use familiar words and dates, so human passwords have much less real entropy than our formula shows."
+- **Technical Answer:**  
+  "The metric calculated in PasswordGuard ($E = L \times \log_2 R$) is an upper-bound theoretical character-space estimate under an ideal uniform-character distribution. It does not measure true empirical cognitive entropy. Human-generated passwords suffer from heavy natural language collocations and keyboard habits, making actual guessability substantially higher than the theoretical upper bound."
+
+---
+
+### Question 24: Did you actually crack these passwords with a GPU rig?
+- **Simple English Answer:**  
+  "No, we did not run cracking software or GPUs. The crack times in our app are mathematical calculations based on assumed guessing speeds to help students visualize the huge difference between short and long passwords."
+- **Technical Answer:**  
+  "No physical cracking attacks or hardware benchmarks were conducted. The crack time displays are educational mathematical projections calculated as $(R^L / 2) / V_{\text{guess}}$ across three standardized illustrative guessing rates (100, $10^7$, and $10^{11}$ guesses/sec). Real cracking speeds depend heavily on the target KDF work factor, salt configuration, dictionary rules, and adversary hardware."
+
+---
+
+### Question 25: Why did you use synthetic passwords instead of real leaked password dumps?
+- **Simple English Answer:**  
+  "Using real leaked passwords would violate ethical research rules and could expose real people's accounts. Using 150 synthetic passwords lets us test each specific pattern safely without privacy risks."
+- **Technical Answer:**  
+  "In accordance with ICT research ethics guidelines like the Menlo Report, handling live user credentials or breached personal databases introduces severe privacy liabilities and ethical risks. Synthetic sampling allowed us to systematically isolate structural variables—such as length, composition, and dictionary substrings—in a safe, fully reproducible, and ethically sound manner."
+

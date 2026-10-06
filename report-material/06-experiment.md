@@ -11,7 +11,7 @@ The primary purpose of the experimental evaluation is to assess whether the impl
 Importantly, this experiment evaluates heuristic consistency on controlled synthetic samples; it does not serve as an independent real-world cracking benchmark.
 
 ### 6.2 Synthetic Dataset Construction
-To eliminate privacy risks associated with handling compromised personal credentials [TODO: Citation needed - Ethical handling of credential datasets in research, e.g., Thomas et al., 2017], a reproducible dataset of 150 intentionally constructed synthetic passwords was established, partitioned equally into five categories ($n = 30$ per category):
+To eliminate privacy risks associated with handling compromised personal credentials [6, 14], a reproducible dataset of 150 intentionally constructed synthetic passwords was established, partitioned equally into five categories ($n = 30$ per category):
 
 - **Category A: Short Simple Passwords ($L \in [3, 5]$)**
   - Composed primarily of lowercase 3–5 letter words, occasionally with a single digit (e.g., `cat`, `dog`, `sun`, `red2`, `sky1`, `tree`).

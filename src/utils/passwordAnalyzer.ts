@@ -39,7 +39,7 @@ export interface PasswordAnalysisResult {
   tierColor: string;
   estimatedEntropyBits: number;
   searchSpaceCombinations: string; // Scientific or formatted string
-  searchSpaceBigIntApprox: number; // For log-scale comparison
+  searchSpaceLog10: number; // For log10-scale comparison
   checks: SecurityCheckItem[];
   warnings: string[];
   recommendations: string[];
@@ -137,7 +137,7 @@ export function analyzePassword(pwd: string): PasswordAnalysisResult {
       tierColor,
       estimatedEntropyBits: 0,
       searchSpaceCombinations: '0',
-      searchSpaceBigIntApprox: 0,
+      searchSpaceLog10: 0,
       checks: [
         { id: 'len', label: 'At least 12 characters', passed: false, type: 'requirement' },
         { id: 'lower', label: 'Contains lowercase letters', passed: false, type: 'requirement' },
@@ -420,7 +420,7 @@ export function analyzePassword(pwd: string): PasswordAnalysisResult {
     tierColor,
     estimatedEntropyBits,
     searchSpaceCombinations: combinationsString,
-    searchSpaceBigIntApprox: log10Combinations,
+    searchSpaceLog10: log10Combinations,
     checks,
     warnings,
     recommendations,

@@ -83,7 +83,7 @@ During our systematic repository audit, the following issues were cataloged:
    - Confirmed `passphraseBonus` is present in `ScoreBreakdown` interface and displayed in `AnalyzerView.tsx`.
    - Verified formula: $\text{rawScore} = \text{lengthScore} + \text{varietyScore} + \text{diversityBonus} + \text{passphraseBonus} - \text{penalties}$.
 4. **Unit Test Boundaries Hardened:**
-   - Verified and maintained boundary assertions in `src/utils/passwordAnalyzer.test.ts` for exact threshold values (0, 39, 40, 69, 70, 100). All 13 unit tests pass.
+   - Verified and maintained boundary assertions in `src/utils/passwordAnalyzer.test.ts` for exact threshold values (0, 39, 40, 69, 70, 100), along with numeric-stability tests on extreme password lengths. All 17 unit tests pass.
 5. **UI & Report Academic Claims Refined:**
    - Replaced strong claims ("proves", "validated", "accurately predicts") with defensive phrasing ("shows how the heuristic responds", "consistent with scoring rules", "educational structural evaluation").
    - Added explicit disclaimers: "The result does not guarantee real-world security."
@@ -176,7 +176,7 @@ All generated experiment files (`data/results.csv`, `data/results.json`, `src/da
 
 ## 7. Tests and Validation
 
-- **Unit Test Suite:** `vitest run` executes 13 unit tests covering:
+- **Unit Test Suite:** `vitest run` executes 17 unit tests covering:
   - Empty input handling
   - Short password penalties
   - Lowercase-only and numeric-only pool deductions
@@ -188,7 +188,11 @@ All generated experiment files (`data/results.csv`, `data/results.json`, `src/da
   - Explicit boundary classifications: 0, 39, 40, 69, 70, 100
   - Score breakdown sum integrity (`rawScore`)
   - Crack duration formatting
-- **Test Result:** 13 / 13 tests PASSED (100%).
+  - Normal strong password stability without numeric degradation
+  - Passphrase evaluation with stable log-space search space
+  - Extreme password length (500 chars) handling without Infinity/NaN
+  - Boundary password length (1000 chars) handling without Infinity/NaN
+- **Test Result:** 17 / 17 tests PASSED (100%).
 - **Linter Status:** `oxlint` executed across 13 files: 0 errors, 0 warnings.
 - **TypeScript Build:** `tsc -b && vite build` succeeded with 0 errors.
 
@@ -292,6 +296,61 @@ During the final verification pass (2026-10-06), the remaining edge cases and do
 
 ---
 
-## 11. Final Project Status
+## 12. Citation & Documentation Finalization Pass
 
-Feature Freeze: The PasswordGuard application contains sufficient functionality for the course assignment. Further work should prioritize academic reporting and presentation preparation rather than feature expansion.
+A comprehensive audit and finalization pass was completed to achieve full academic consistency, eliminate citation placeholders, resolve documentation discrepancies, and verify frozen implementation baselines:
+
+1. **Verified Test Count:**
+   - Vitest unit test suite executes **17 unit tests** across `src/utils/passwordAnalyzer.test.ts` (13 core heuristic & boundary tests + 4 numeric stability and extreme length tests).
+   - All references across documentation and audit logs updated to reflect the verified count of 17 tests (eliminating obsolete "13 tests" or "13/13" text).
+
+2. **README Terminology Corrections:**
+   - Replaced "empirical benchmark on synthetic passwords" with "controlled functional evaluation of the PasswordGuard heuristic using synthetic passwords".
+   - Replaced absolute security guarantee ("Guarantee 100% client-side browser evaluation...") with defensible privacy statement ("Designed for 100% client-side password evaluation without application-level password storage or transmission").
+   - Softened CSPRNG salting claims from "guaranteeing" to "providing cryptographically secure pseudo-randomness".
+   - Clarified Vitest test execution command comment (`17 tests via Vitest`).
+
+3. **Search-Space Field Naming (`searchSpaceLog10`):**
+   - In `src/utils/passwordAnalyzer.ts`, safely renamed `searchSpaceBigIntApprox` to `searchSpaceLog10` to accurately reflect its actual mathematical semantics ($\log_{10}(R^L)$).
+   - Updated `PasswordAnalysisResult` interface, empty result initializer, return object mapping, and all 4 test assertions in `src/utils/passwordAnalyzer.test.ts`.
+   - Confirmed zero UI or external data dependencies; build and tests verified with zero breaking changes.
+
+4. **Citation Inventory & Source Verification:**
+   - Created `CITATION_AUDIT.md` providing an authoritative inventory of all academic claims mapped to verified sources in ACM reference format.
+   - Verified **17 primary sources** against ACM, IEEE, USENIX, Bell System, IETF RFCs, and NIST Special Publications/FIPS standards.
+   - Addressed and corrected prior bibliographic errors (e.g. corrected Ur et al. 2015 venue to USENIX Security 15; corrected Weir et al. 2009 co-author to Bill Glodek).
+   - Zero manufactured or fabricated citations.
+
+5. **Report Material Citation Integration (`report-material/`):**
+   - Successfully resolved all 16 `[TODO: Citation needed...]` placeholders across `01-abstract.md`, `02-introduction.md`, `03-background.md`, `04-methodology.md`, `06-experiment.md`, `08-discussion.md`, `09-limitations.md`, and `10-conclusion.md`.
+   - Populated `report-material/10-conclusion.md` with the complete, alphabetically sorted 17-item ACM numbered reference list.
+   - Updated in-text bracketed citations (`[1]`, `[2]`, `[1, 3]`, etc.) adhering strictly to the course ACM format.
+   - **Remaining Citation TODO Count:** **0**.
+
+6. **Report Content Rigor & Synthetic Data Transparency:**
+   - Preserved descriptive presentation in `07-results.md` (no unjustified claims of "proves security" or "validates resistance").
+   - Added nuanced methodological framing in `08-discussion.md`: clearly stated that the heuristic defines both the scoring rules and the evaluation, so results reflect internal heuristic response to controlled structural archetypes rather than universal laws.
+   - Maintained strict synthetic dataset transparency ($N = 150$, 5 categories of 30, no live or breached student credentials).
+
+7. **Presentation & Q&A Synchronization:**
+   - Reviewed `presentation-outline.md`: preserved 10-slide structure, verified simple English speaker notes, and confirmed alignment with corrected report materials.
+   - Updated `qa-preparation.md`: expanded to 25 structured defense questions, adding targeted answers addressing heuristic circularity, theoretical vs. empirical entropy, assumed guessing rates, and synthetic dataset ethics.
+
+8. **Comprehensive Quality & Pipeline Verification:**
+   - **Linter Status:** `npm run lint` (`oxlint`): **0 errors, 0 warnings** across 13 files.
+   - **Unit Test Status:** `npm test` (`vitest run`): **17 / 17 tests PASSED** (100%).
+   - **Experiment Status:** `npm run experiment`: Generated bit-for-bit identical results for the frozen baseline ($N=150$, Weak=59, Medium=12, Strong=79; Cat A=2.0, Cat B=10.5, Cat C=80.8, Cat D=75.8 / 182.9 bits, Cat E=90.0).
+   - **Production Build:** `npm run build` (`tsc -b && vite build`): **Succeeded in <600ms** with zero errors.
+
+9. **Remaining Academic Risks:**
+   - None within the scope of documentation and software implementation. The project is fully aligned with course requirements, grading rubrics, and the ACM Word template guidelines.
+
+
+---
+
+## 13. Final Project Status & Readiness
+
+- **Feature Freeze Status:** Fully locked. Zero code changes required for core heuristics, data schemas, or UI components.
+- **Academic Readiness:** 100% prepared. Citations verified, references mapped, documentation synchronized, and overclaims eliminated.
+- **Next Phase:** FINAL ARTIFACT PRODUCTION (Final DOCX report, Final PDF paper, Final PowerPoint slides, Final spoken presentation script, and Final Q&A rehearsal).
+

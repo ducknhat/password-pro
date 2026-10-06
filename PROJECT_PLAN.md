@@ -38,25 +38,28 @@ The software implementation, scoring heuristic, cryptographic demonstration, tes
 
 ## 3. Remaining Tasks
 
-### Phase A: Citation Verification (Academic Paper Preparation)
-- [ ] Cross-check each inventory item in `PROJECT_AUDIT.md` Section 9.
-- [ ] Confirm bibliography details (authors, publication years, conference titles) for candidate papers.
-- [ ] Finalize standard BibTeX / APA citation format for the manuscript.
+### Phase A: Citation Verification (Academic Paper Preparation) — COMPLETED
+- [x] Cross-checked all 16 citation placeholders across `report-material/01` through `10`.
+- [x] Verified bibliography details (authors, publication years, conference titles, DOIs) for 17 authoritative primary sources.
+- [x] Formatted references in standard ACM reference format (alphabetical numbered) per course template.
+- [x] Created `CITATION_AUDIT.md` inventorying claim-to-source mapping and audit methodology.
+- [x] Replaced all placeholders in report materials with verified numbered citations [1]–[17].
 
-### Phase B: Scientific Report Finalization
-- [ ] Compile `report-material/01-abstract.md` through `10-conclusion.md` into the IEEE/University template format (`Paper_Template_EN.docx`).
-- [ ] Capture high-resolution application screenshots for figures:
+### Phase B: Scientific Report Finalization (Next Step: Awaiting Approval)
+- [ ] Compile `report-material/01-abstract.md` through `10-conclusion.md` into the course template format (`nguyenlieu/Paper_Template_EN.docx`).
+- [ ] Incorporate high-resolution application screenshots and charts for figures:
   - Figure 1: Password Analyzer UI with score breakdown and checklist.
   - Figure 2: Interactive Hashing & Salting demonstration.
-  - Figure 3: Average Strength Score by Category (Recharts bar chart).
+  - Figure 3: Average Strength Score by Category (bar chart).
   - Figure 4: Overall Tier Distribution (donut chart).
 - [ ] Review English academic register, ensuring accessible technical English suitable for an undergraduate defense.
+- [ ] Export final DOCX and PDF versions.
 
-### Phase C: Presentation Preparation
+### Phase C: Presentation Preparation (Next Step: Awaiting Approval)
 - [ ] Build 10-slide PowerPoint slide deck based on `presentation-outline.md`.
 - [ ] Incorporate screenshots and data charts from the frozen results snapshot.
 - [ ] Practice speaking script (8–10 minutes target duration, ~1 minute per slide).
-- [ ] Rehearse Q&A responses using `qa-preparation.md` (21 structured questions with simple and technical responses).
+- [ ] Rehearse Q&A responses using `qa-preparation.md` (25 structured questions with simple and technical responses).
 
 ---
 
@@ -70,19 +73,21 @@ The software implementation, scoring heuristic, cryptographic demonstration, tes
 | **Unit Tests** | **PASSING** | 17/17 passing in Vitest (including numeric stability) |
 | **Experiment Data** | **FROZEN** | 150 synthetic samples, all files match |
 | **Linter / Build** | **PASSING** | 0 errors, 0 warnings; TS build OK |
-| **Report Drafts** | **REVIEWED** | 10 markdown chapters ready for compilation |
-| **Citations** | **INVENTORY READY** | 16 placeholders cataloged, awaiting verification |
+| **Report Drafts** | **VERIFIED** | 10 markdown chapters ready for compilation with ACM citations |
+| **Citations** | **VERIFIED** | 17 verified primary sources in ACM format, 0 TODOs remaining |
 | **Presentation Outline** | **READY** | 10 slides with speaker notes in simple English |
-| **Q&A Guide** | **READY** | 21 questions with Simple & Technical answers |
+| **Q&A Guide** | **READY** | 25 questions with Simple & Technical answers |
 
 ---
 
 ## 5. Final Submission Checklist
 
-- [ ] Software runs locally via `npm run dev` with zero console errors.
-- [ ] Unit tests pass via `npm test`.
-- [ ] Experiment runs reproducibly via `npm run experiment`.
-- [ ] Production build succeeds via `npm run build`.
-- [ ] Final paper DOCX compiled according to course guidelines.
+- [x] Software runs locally via `npm run dev` with zero console errors.
+- [x] Unit tests pass via `npm test` (17/17 passed).
+- [x] Experiment runs reproducibly via `npm run experiment` (frozen numbers match).
+- [x] Production build succeeds via `npm run build` (<600ms).
+- [x] Citation audit complete (`CITATION_AUDIT.md`) with 17 verified primary sources.
+- [ ] Final paper DOCX compiled according to course guidelines (`Paper_Template_EN.docx`).
+- [ ] Final paper PDF exported.
 - [ ] Final slide deck PPTX ready with presenter view notes.
 - [ ] Practice defense session completed.

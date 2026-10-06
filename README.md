@@ -1,7 +1,7 @@
 # PasswordGuard: Password Security & Authentication Analyzer
 
 > **Course Context:** English Presentation Skills for Information Technology Students (University Level)  
-> **Project Scope:** Educational password security analyzer, search-space complexity estimator, one-way hashing & salting demonstrator, and empirical benchmark on synthetic passwords.
+> **Project Scope:** Educational password security analyzer, search-space complexity estimator, one-way hashing & salting demonstrator, and controlled functional evaluation of the PasswordGuard heuristic using synthetic passwords.
 
 ---
 
@@ -14,7 +14,7 @@
 - **Educational Clarity:** Demystify password complexity rules and explain *why* password length mathematically dominates character alphabet expansion.
 - **Threat Awareness:** Detail the most prevalent real-world authentication attack vectors (weak passwords, password reuse, credential stuffing, phishing, and offline hash cracking).
 - **Cryptographic Transparency:** Demonstrate the difference between reversible encryption and one-way hashing, the role of cryptographic salting in stopping rainbow tables, and why fast hashes like SHA-256 alone are insufficient for real-world password storage.
-- **Privacy by Design:** Guarantee 100% client-side browser evaluation with zero server storage, zero network transmission, and zero persistent browser logging.
+- **Privacy by Design:** Designed for 100% client-side password evaluation without application-level password storage or transmission.
 
 ---
 
@@ -35,8 +35,8 @@
    - Dynamic 16-byte cryptographically secure random salt generator.
    - Side-by-side comparison illustrating rainbow table vulnerability vs. salted output.
    - Deep dive into modern slow Key Derivation Functions: **Argon2id**, **bcrypt**, **scrypt**, and **PBKDF2**.
-4. **Reproducible Experimental Benchmark:**
-   - Tested against 150 synthetic passwords across 5 structural categories.
+4. **Reproducible Controlled Evaluation:**
+   - Evaluated against 150 synthetic passwords across 5 structural categories.
    - Interactive charts rendered via Recharts.
    - Exportable dataset in JSON and CSV formats.
 
@@ -96,7 +96,7 @@ npm install
 # Start local development server
 npm run dev
 
-# Run unit test suite (Vitest)
+# Run unit test suite (17 tests via Vitest)
 npm test
 
 # Run synthetic experiment & regenerate data files
@@ -165,7 +165,7 @@ Each sample was evaluated for length, diversity count, heuristic score, tier cla
 ## 11. Security Considerations
 - **No Remote Transmission:** All computation executes purely in the browser thread using standard JavaScript and the Web Crypto API.
 - **No Persistence:** Passwords entered in the UI are held only in local component state (`useState`) and are discarded when cleared or navigated away.
-- **CSPRNG Salting:** Salts are generated using `window.crypto.getRandomValues()`, guaranteeing cryptographic randomness.
+- **CSPRNG Salting:** Salts are generated using `window.crypto.getRandomValues()`, providing cryptographically secure pseudo-randomness.
 
 ---
 

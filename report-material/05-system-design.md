@@ -47,7 +47,7 @@ async function computeSha256(text: string): Promise<string> {
   return bufferToHex(hashBuffer);
 }
 ```
-A 16-byte random salt is generated via `window.crypto.getRandomValues()`. The UI performs dynamic computations of both $\text{SHA-256}(\text{password})$ and $\text{SHA-256}(\text{password} \parallel \text{salt})$, providing a live side-by-side view demonstrating how salting guarantees unique hash outputs across identical passwords and invalidates rainbow table lookups.
+A 16-byte random salt is generated via `window.crypto.getRandomValues()`. The UI performs dynamic computations of both $\text{SHA-256}(\text{password})$ and $\text{SHA-256}(\text{password} \parallel \text{salt})$, providing a live side-by-side view demonstrating how unique salting produces distinct hash outputs across identical passwords and defeats precomputed rainbow table lookups.
 
 #### 3. Data Visualization & UI Layer
 The visual presentation is styled using a modern, cybersecurity-focused dark theme in Vanilla CSS, ensuring high contrast, clean typography (using Plus Jakarta Sans and JetBrains Mono), and responsive multi-column grid layouts. Statistical visualizations are rendered through Recharts, including:
